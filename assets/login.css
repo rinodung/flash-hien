@@ -1,0 +1,226 @@
+*{margin:0px;padding:0px;}
+a{text-decoration:none;opacity:0.7;}
+a:hover{cursor:pointer;opacity:1;}
+#wrapper{width:98%;margin:10px auto;
+-webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -o-border-radius: 5px;border-radius: 5px;
+    -webkit-box-shadow: 0 0  10px #646564;
+    -moz-box-shadow: 0 0  6px #646564;}
+#wrapper #top{height:32px;background: url(top_bg.png);position:relative;overflow:hidden;}
+#wrapper #top h4{line-height:31px;color:#fff;position:absolute;display:block;white-space:nowrap;}
+
+#wrapper #header{height: 107px;position:relative;background: #29abfe;}
+#wrapper #header img{ margin: 4px 65px; }
+#wrapper #header #banner{top: 16px;left: 183px; position: absolute;}
+#wrapper #header #banner p{font: bold 18px "Times New Roman", Tahoma,arial,verdana,sans-serif;color: white;}
+
+
+#wrapper #header #menu{bottom: 5px;right: 12px;position: absolute;}
+#wrapper #header #menu ul li{display: inline-block;margin: 0px 5px 0px 10px;height:40px;}
+#wrapper #header #menu ul li#kehoach a{width:180px;}
+#wrapper #header #menu ul li#hd a{width:140px;}
+
+#wrapper #header #menu ul li a
+					{
+						font-size: 14px;color:#000;
+                        background: url(blue_bg.jpg) repeat-x;
+                        padding:5px 20px;height:20px;display:block;
+                        -webkit-border-radius: 5px;
+                        -moz-border-radius: 5px;
+                        -o-border-radius: 5px;
+                        border-radius: 7px;                      
+                        -webkit-box-shadow: 2px 2px  6px #646564;
+                        -moz-box-shadow: 2px 2px 6px #646564;
+                        line-height:20px;
+                        text-align:center;
+                        border:1px dashed #ebebeb;
+                        font-size:14px;
+                    }
+#wrapper #header #menu ul li a:hover,
+#wrapper #header #menu ul li a.active{font-weight:bold;color:#fff;opacity:1;}
+
+#wrapper #primary
+{
+    padding:10px 10px;
+    background:#fff;
+    margin: 0px auto;
+    display:block;
+	width:97%;
+   
+    position:relative;
+    min-height:620px;
+}
+#wrapper #primary #login
+{
+    min-height: 600px; 
+    border:1px solid #e8e9e8;
+    
+    padding:10px 10px;
+}
+#wrapper #primary #login fieldset#dangnhap
+{
+    //display: none;
+    float: left;
+    margin-right: 20px;
+    margin-top: 200px;
+    width: 708px;
+}
+#wrapper #primary #login fieldset#huongdan
+{
+    text-align: center;
+}
+#wrapper #primary #login fieldset#huongdan p
+{
+    text-align: left;
+    text-indent: 0.5em;
+}
+#wrapper #primary  table
+{
+    margin:60px auto 10px;
+    font-size:18px;
+    
+}
+#wrapper #primary table tr
+{
+    height:32px;
+}
+#wrapper #login  form table td
+{
+    padding:0px 5px;
+}
+
+#wrapper #login  form table td.label{text-align:right;width:100px;}
+#wrapper #login form select
+{
+    width:240px;
+    height:24px;
+    
+}
+#wrapper #login form select:hover
+{
+    cursor:pointer;
+}
+#wrapper #login form input[type='text']
+{
+    width:240px;
+    height:24px;
+    
+    border:1px solid #abaaaa;
+    -webkit-border-radius:5px;
+    color:#000;
+    
+    
+}
+#wrapper #login form input[type='submit']
+{
+    padding:10px 30px;
+    margin:0px auto;
+    text-align:center;
+}
+#wrapper #login form input[type='submit']:hover
+{
+    cursor:pointer;
+}
+#wrapper #login button
+{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	color: #ffffff;
+	padding: 8px 18px;
+	background: -moz-linear-gradient(
+		top,
+		#008bfd 0%,
+		#056a89);
+	background: -webkit-gradient(
+		linear, left top, left bottom, 
+		from(#008bfd),
+		to(#056a89));
+	-moz-border-radius: 15px;
+	-webkit-border-radius: 15px;
+	border-radius: 15px;
+	border: 0px solid #ffffff;
+	-moz-box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 1px rgba(5,106,137,0.3);
+	-webkit-box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 1px rgba(5,106,137,0.3);
+	box-shadow:
+		0px 1px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 1px rgba(5,106,137,0.3);
+	text-shadow:
+		0px -1px 0px rgba(000,000,000,0.2),
+		0px 1px 0px rgba(255,255,255,0.3);
+}
+#wrapper #login button:hover
+{
+	cursor:pointer;
+	background: -moz-linear-gradient(
+		top,
+		#056a89 0%,
+		#008bfd 75%,
+		#008bfd);
+	background: -webkit-gradient(
+		linear, left top, left bottom, 
+		from(#056a89),
+		color-stop(0.75, #008bfd),
+		to(#008bfd));
+	-moz-border-radius: 15px;
+	-webkit-border-radius: 15px;
+	border-radius: 15px;
+	border: 0px solid #ffffff;
+	-moz-box-shadow:
+		0px 0px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 1px rgba(5,106,137,0.3);
+	-webkit-box-shadow:
+		0px 0px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 1px rgba(5,106,137,0.3);
+	box-shadow:
+		0px 0px 3px rgba(000,000,000,0.5),
+		inset 0px 0px 1px rgba(5,106,137,0.3);
+}
+#wrapper #primary #info
+{
+    margin: 60px 0px 20px 0px;
+}
+#wrapper #primary #info ul
+{
+    margin-left:60px;
+}
+#wrapper #primary fieldset
+{
+    padding:5px 10px;
+}
+#wrapper #primary fieldset legend
+{
+    font-weight:bold;
+    font-size:16px;
+    
+    
+}
+#wrapper #primary fieldset p
+{
+    line-height:36px;
+}
+#wrapper table input[type='text']
+{
+    
+}
+
+#wrapper #footer
+{
+    
+	
+	height:64px;
+	font-size: 0.8em;
+	text-align: center;
+    color: #29abff;   
+    background:url("../images/footer_bg.jpg");
+    
+	
+}
+
+
+
+
