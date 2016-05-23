@@ -312,16 +312,7 @@
 			var responder:Responder = new Responder(on_set_position_complete, on_set_position_fail);
 			this.nc.call("sendCommand",responder,scope,command,this.user_id,args);
 		}
-		/*public function getChairAvatar(user_id:String): MovieClip {
-			var result:MovieClip = null;
-			for(var i:String in this.chairArray){
-				
-				
-				if( this.chairArray[i].id == user_id) result = this.chairArray[i].myavatar;
-			}
-			
-			return result;
-		}*/
+		
 		
 		private function on_set_position_complete(result:Object):void
 		{
