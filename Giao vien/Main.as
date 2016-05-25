@@ -272,6 +272,7 @@
 					
 					if(user.client_cer == this.user_id) {
 						this.notifyPosition(newChairIndex);
+						
 					}
 				} else {
 					trace("Set new chair failure: " + user.client_cer);
@@ -412,6 +413,7 @@
 			trace(this.txt_inputten.text + " " + this.txt_inputmk.text);
 			gotoAndStop(2);
 			this.btn_vote.addEventListener(MouseEvent.CLICK,btn_vote_click);
+			this.btn_checkme.addEventListener(MouseEvent.CLICK,ham_checkme);
 			this.btn_dangxuat.addEventListener(MouseEvent.CLICK, ham_dangxuat);
 			
 			connect();
@@ -432,6 +434,19 @@
 			if(avatar == null) {
 				return;
 			}
+			if(avatar.currentFrame != 3) {
+				avatar.gotoAndStop(3);
+			} else {
+				avatar.gotoAndStop(1);
+			}
+			
+		}
+		// ham xem mnh o dau
+		public function ham_checkme(event: MouseEvent):void{
+			var avatar:MovieClip = this.getAvatarByUserId(this.user_id);
+			if(avatar == null) {
+				return;
+			}
 			if(avatar.currentFrame == 1) {
 				avatar.gotoAndStop(2);
 			} else {
@@ -439,7 +454,6 @@
 			}
 			
 		}
-		
 		
 		// test
 		function clickHandler (event:MouseEvent):void
