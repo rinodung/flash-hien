@@ -168,7 +168,7 @@
 				users=data["ol"] as Array;
 				var arr_data:Array=new Array();
 				
-				var myavatar = null;
+				var avatar = null;
 				
 				// Empty Class room
 				this.resetAllChair(users);
@@ -238,19 +238,19 @@
 		
 		// Set Chair
 		public function setChairPosition(user:Client): MovieClip{
-			var myavatar = null;
+			var avatar = null;
 			if(user.client_icon_name=="ava1"){
 					
-					myavatar = new ava1_mc();									
+					avatar = new ava1_mc();									
 			}
 			else if (user.client_icon_name=="ava2"){
-					myavatar = new ava2_mc();
+					avatar = new ava2_mc();
 			}
 			else if (user.client_icon_name=="ava3"){
-					myavatar = new ava3_mc();					
+					avatar = new ava3_mc();					
 			}
 			else{
-					myavatar = new ava4_mc();					
+					avatar = new ava4_mc();					
 			}
 			
 			var position = user.client_icon_position;
@@ -262,11 +262,11 @@
 				   
 				    tmpChair = this.chairArray[newChairIndex];
 							
-					myavatar.x =tmpChair.x;
-					myavatar.y =tmpChair.y;
+					avatar.x =tmpChair.x;
+					avatar.y =tmpChair.y;
 					tmpChair.id = user.client_cer;
-					tmpChair.avatar = myavatar;
-					this.addChild(myavatar);
+					tmpChair.avatar = avatar;
+					this.addChild(avatar);
 					
 					trace("Set new chair successfully: " + user.client_cer);
 					
@@ -281,16 +281,16 @@
 				// Da co vi tri
 				tmpChair = this.chairArray[position];
 							
-				myavatar.x =tmpChair.x;
-				myavatar.y =tmpChair.y;
+				avatar.x =tmpChair.x;
+				avatar.y =tmpChair.y;
 				tmpChair.status = true;
 				tmpChair.id = user.client_cer;
-				tmpChair.avatar = myavatar;
-				this.addChild(myavatar);
+				tmpChair.avatar = avatar;
+				this.addChild(avatar);
 				trace("Set old chair successfully: " + user.client_cer);
 			}			
 			
-			return myavatar;
+			return avatar;
 		} // end setChairPorition
 		
 		// Get Empty Chair Index
@@ -299,6 +299,17 @@
 			for(var i:String in this.chairArray){
 				if(this.chairArray[i].status == false) {
 					return i;		
+				}				
+			}
+			return result;
+		}// end getEmptyChairIndex
+		
+		// Get Avatar Movie clip by user id
+		public function getAvatarByUserId(userId:String): MovieClip {
+			var result:MovieClip= null;
+			for(var i:String in this.chairArray){
+				if(this.chairArray[i].id == userId) {
+					return this.chairArray[i].avatar;		
 				}				
 			}
 			return result;
@@ -397,10 +408,10 @@
 			//var tendn = this.txt_inputten.text;
 			//var a= tendn.text + "_mc";
 			//trace (tendn);
-			//var myavatar = new ava1_mc();
+			//var avatar = new ava1_mc();
 			trace(this.txt_inputten.text + " " + this.txt_inputmk.text);
 			gotoAndStop(2);
-			//this.btn_vote.addEventListener(MouseEvent.CLICK,btn_vote_click);
+			this.btn_vote.addEventListener(MouseEvent.CLICK,btn_vote_click);
 			this.btn_dangxuat.addEventListener(MouseEvent.CLICK, ham_dangxuat);
 			
 			connect();
@@ -413,12 +424,22 @@
 			this.gotoAndStop(1);
 		}
 		//end ham_dang xuat
-		
+	
+	
 		// ham btn_vote_click
-		/*public function btn_vote_click (event: MouseEvent):void{
-			myavatar.gotoAndStop(2);
-		}*/
-		//end btn_vote_click
+		public function btn_vote_click (event: MouseEvent):void{
+			var avatar:MovieClip = this.getAvatarByUserId(this.user_id);
+			if(avatar == null) {
+				return;
+			}
+			if(avatar.currentFrame == 1) {
+				avatar.gotoAndStop(2);
+			} else {
+				avatar.gotoAndStop(1);
+			}
+			
+		}
+		
 		
 		// test
 		function clickHandler (event:MouseEvent):void
