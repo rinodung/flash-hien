@@ -65,6 +65,13 @@
 		public var tenMH:String;
 		//public var btn_vote:fl.controls.Button;
 		
+		// Video  var
+		private var ns_playback:NetStream;
+		private var ns_voteback:NetStream;
+		private var video_playback:Video;
+		private var video_voteback:Video;
+		private var mic:Microphone;
+		
 		//SharedObject
 		public var so_ol:SharedObject;
 		public var so_name:String="OnlineList";
@@ -102,6 +109,7 @@
 						break;
 					case "NetConnection.Connect.Success":
 						trace("Success");
+						playbackVideo();
 						break;
 					case "NetConnection.Connect.Closed":
 						
@@ -206,7 +214,7 @@
 				
 				//Anh xa client java red5 => client actionscript 3
 				var user:Client=users[i] as Client;							
-				if(user.client_icon_position != "-1"){
+				if(user.client_icon_position != "-1" && user.client_type == "sv"){
 					this.setChairPosition(user);				
 				}				
 				
@@ -221,7 +229,7 @@
 				
 				//Anh xa client java red5 => client actionscript 3
 				var user:Client=users[i] as Client;							
-				if(user.client_icon_position == "-1"){
+				if(user.client_icon_position == "-1" && user.client_type == "sv"){
 					this.setChairPosition(user);				
 				}				
 				
@@ -474,6 +482,39 @@
 		function clickHandler (event:MouseEvent):void
 		{
 			trace("button clicked:", event.currentTarget.i)
+		}
+		
+		private function playbackVideo():void
+		{
+			this.ns_playback = new NetStream(nc);
+			this.ns_playback.addEventListener(NetStatusEvent.NET_STATUS, handleStreamStatus);
+			//this.video_voteback = new Video(5,5);
+			//this.video_voteback.x = 15;
+			//this.video_voteback.y = 5;
+			//this.mc1 = new MovieClip();
+			this.video_playback = new Video(400,200);
+			this.video_playback.x = 370;
+			this.video_playback.y = 100;
+			this.video_playback.attachNetStream(ns_playback);
+			this.ns_playback.play(this.room_id, -1);
+		//	video_playback.clear();
+		//	mc1.addChild(video_playback);
+		//	mc1.addEventListener(MouseEvent.CLICK, fullscreen);
+			this.addChild(video_playback);
+		}
+		
+		private function handleStreamStatus(e:NetStatusEvent):void {
+			switch(e.info.code) {
+				case 'NetStream.Buffer.Empty':
+					trace("Video Netstream Buffer Empty");
+					break;
+				case 'NetStream.Buffer.Full':
+					trace("Video Netstream Buffer Full");
+					break;
+				case 'NetStream.Buffer.Flush':
+					trace("Video Netstream Buffer Flushed!!!!");
+					break;
+			}
 		}
 	}// end movie clip
 	

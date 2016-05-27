@@ -1,0 +1,54 @@
+[INFO] [NioProcessor-2] org.red5.server.net.rtmp.RTMPMinaIoHandler - Session opened: 1
+[INFO] [NioProcessor-2] org.red5.server.net.rtmp.codec.RTMPProtocolDecoder - Action connect
+roomStart Method: room1
+[INFO] [NioProcessor-2] org.red5.core.Application - W3C x-category:session x-event:connect c-ip:127.0.0.1 c-client-id:0
+appConnect Method: 0
+appJoin Method: firstapp
+roomConnect Method 0
+roomJoin Method: room1
+
+[INFO] [NioProcessor-3] org.red5.server.net.rtmp.RTMPMinaIoHandler - Session opened: 2
+[INFO] [NioProcessor-3] org.red5.server.net.rtmp.codec.RTMPProtocolDecoder - Action connect
+[INFO] [NioProcessor-3] org.red5.core.Application - W3C x-category:session x-event:connect c-ip:127.0.0.1 c-client-id:1
+appConnect Method: 0
+appJoin Method: firstapp
+roomConnect Method 0
+roomJoin Method: room1
+
+[INFO] [NioProcessor-3] org.red5.server.net.rtmp.RTMPMinaIoHandler - Session closed: 2
+roomDisconnect Method
+roomLeave Method: room1
+[INFO] [NioProcessor-3] org.red5.core.Application - W3C x-category:session x-event:disconnect c-ip:127.0.0.1 c-client-id:1
+appLeave Method: firstapp
+
+[INFO] [NioProcessor-2] org.red5.server.net.rtmp.RTMPMinaIoHandler - Session closed: 1
+roomDisconnect Method
+roomLeave Method: room1
+[INFO] [NioProcessor-2] org.red5.core.Application - W3C x-category:session x-event:disconnect c-ip:127.0.0.1 c-client-id:0
+appLeave Method: firstapp
+roomstop method: room1
+
+[INFO] [NioProcessor-4] org.red5.server.net.rtmp.RTMPMinaIoHandler - Session opened: 3
+[INFO] [NioProcessor-4] org.red5.server.net.rtmp.codec.RTMPProtocolDecoder - Action connect
+roomStart Method: room1
+[INFO] [NioProcessor-4] org.red5.core.Application - W3C x-category:session x-event:connect c-ip:127.0.0.1 c-client-id:2
+appConnect Method: 0
+appJoin Method: firstapp
+roomConnect Method 0
+roomJoin Method: room1
+
+
+[INFO] [NioProcessor-5] org.red5.server.net.rtmp.RTMPMinaIoHandler - Session opened: 4
+[INFO] [NioProcessor-5] org.red5.server.net.rtmp.codec.RTMPProtocolDecoder - Action connect
+roomStart Method: room2
+[INFO] [NioProcessor-5] org.red5.core.Application - W3C x-category:session x-event:connect c-ip:127.0.0.1 c-client-id:3
+appConnect Method: 0
+appJoin Method: firstapp
+roomConnect Method 0
+roomJoin Method: room2
+[INFO] [NioProcessor-5] org.red5.server.net.rtmp.RTMPMinaIoHandler - Session closed: 4
+roomDisconnect Method
+roomLeave Method: room2
+[INFO] [NioProcessor-5] org.red5.core.Application - W3C x-category:session x-event:disconnect c-ip:127.0.0.1 c-client-id:3
+appLeave Method: firstapp
+roomstop method: room2
