@@ -427,7 +427,6 @@
 			trace(this.txt_inputten.text + " " + this.txt_inputmk.text);
 			gotoAndStop(2);
 			this.btn_vote.addEventListener(MouseEvent.CLICK,btn_vote_click);
-			this.btn_checkme.addEventListener(MouseEvent.CLICK,ham_checkme);
 			this.btn_dangxuat.addEventListener(MouseEvent.CLICK, ham_dangxuat);
 			
 			connect();
@@ -492,9 +491,9 @@
 			//this.video_voteback.x = 15;
 			//this.video_voteback.y = 5;
 			//this.mc1 = new MovieClip();
-			this.video_playback = new Video(400,200);
-			this.video_playback.x = 370;
-			this.video_playback.y = 100;
+			this.video_playback = new Video(600,300);
+			this.video_playback.x = 260;
+			this.video_playback.y = 120;
 			this.video_playback.attachNetStream(ns_playback);
 			this.ns_playback.play(this.room_id, -1);
 		//	video_playback.clear();
