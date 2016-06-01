@@ -1,0 +1,70 @@
+*{margin:0px;padding:0px;}
+a{text-decoration:none;opacity:0.7;}
+a:hover{cursor:pointer;opacity:1;}
+#wrapper{width:98%;margin:0px auto;
+	-webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -o-border-radius: 5px;border-radius: 5px;
+    -webkit-box-shadow: 0 0  10px #646564;
+    -moz-box-shadow: 0 0  6px #646564;}
+#wrapper #top{height:32px;background: url(top_bg.png);position:relative;overflow:hidden;}
+#wrapper #top h4{line-height:31px;color:#fff;position:absolute;display:block;white-space:nowrap;}
+
+#wrapper #header{height: 107px;position:relative;background: #29abfe;}
+#wrapper #header img{ margin: 4px 65px; }
+#wrapper #header #banner{top: 16px;left: 183px; position: absolute;}
+#wrapper #header #banner p{font: bold 18px "Times New Roman", Tahoma,arial,verdana,sans-serif;color: white;}
+
+
+#wrapper #header #menu{bottom: 5px;right: 12px;position: absolute;}
+#wrapper #header #menu ul li{display: inline-block;margin: 0px 5px 0px 10px;height:40px;}
+#wrapper #header #menu ul li#kehoach a{width:180px;}
+#wrapper #header #menu ul li#hd a{width:140px;}
+
+#wrapper #header #menu ul li a
+					{
+						font-size: 14px;color:#000;
+                        background: url(blue_bg.jpg) repeat-x;
+                        padding:5px 20px;height:20px;display:block;
+                        -webkit-border-radius: 5px;
+                        -moz-border-radius: 5px;
+                        -o-border-radius: 5px;
+                        border-radius: 7px;                      
+                        -webkit-box-shadow: 2px 2px  6px #646564;
+                        -moz-box-shadow: 2px 2px 6px #646564;
+                        line-height:20px;
+                        text-align:center;
+                        border:1px dashed #ebebeb;
+                        font-size:14px;
+                    }
+#wrapper #header #menu ul li a:hover,
+#wrapper #header #menu ul li a.active{font-weight:bold;color:#fff;opacity:1;}
+
+#wrapper #primary
+{
+    padding:10px 0px;
+    background:#fff;
+    margin: 0px auto;
+    position:relative;
+    
+	
+    border:1px solid #e8e9e8;
+}
+#wrapper #primary #flashcontent
+{
+    
+    
+    margin:0px auto;
+	display:block;
+    padding:3px 0px;
+    position:relative;
+}
+#wrapper #primary #flashcontent object
+{
+    margin:0px auto;
+    
+    display:block;
+}
+
+
+
