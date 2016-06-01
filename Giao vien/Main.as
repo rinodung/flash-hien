@@ -1,4 +1,4 @@
-﻿/*
+﻿﻿/*
 	Read function instruction in the main file of phonghoca.
 	The only difference is student application receiving stream and teacher application
 	broastcast stream.
@@ -396,7 +396,7 @@ package
 					obj.masv = client.getclient_cer();
 					obj.name = client.name;
 					obj.address = client.address;
-					obj.bell_status = client.vote_status;
+					obj.bell_status = client.status;
 					if (client.getclient_type() == "gv")
 					{
 						this.room_info.text = "Giảng viên: " + client.getname().split("-")[0];
@@ -405,7 +405,7 @@ package
 					}
 					else if (checkHave(arr_data,client))
 					{
-						if (client.vote_status == 3)
+						if (client.status == 3)
 						{
 							if (checkchangestate(arr_data,client))
 							{
@@ -416,7 +416,7 @@ package
 							//	arr_data[searchpos(arr_data,client)].bell_status = 1;
 							}
 						}
-						if (client.vote_status == 2)
+						if (client.status == 2)
 						{	
 							if (checkchangestate(arr_data,client))
 							{
@@ -439,7 +439,7 @@ package
 								bigbell.gotoAndStop(2);
 							}
 						}
-						if (client.vote_status == 1)
+						if (client.status == 1)
 						{
 							if (checkchangestate(arr_data,client))
 							{
@@ -485,7 +485,7 @@ package
 			{
 				if (array[i].masv == obj.getclient_cer())
 				{
-					if (array[i].bell_status != obj.getVote_status())
+					if (array[i].bell_status != obj.getstatus())
 					{
 						return true;
 					}

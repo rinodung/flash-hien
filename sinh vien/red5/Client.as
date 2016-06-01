@@ -9,7 +9,7 @@
 		
 		public var name:String;
 		public var address:String;
-		public var vote_status:int;
+		public var status:int;
 		public var client_id:int;
 		public var client_cer;
 		public var client_type:String;
@@ -53,12 +53,12 @@
 		{
 			return this.name;
 		}
-		public function getVote_status():int {
-			return vote_status;
+		public function getstatus():int {
+			return status;
 		}
 		
-		public function setVote_status(vote_status:int) {
-			this.vote_status = vote_status;
+		public function setstatus(status:int) {
+			this.status = status;
 		}
 		
 		public function setaddress(address:String)
@@ -96,7 +96,7 @@
 			
 			this.name= input.readObject() as String;
 			this.address = input.readObject() as String;
-			this.vote_status = input.readObject() as int;
+			this.status = input.readObject() as int;
 			this.client_id = input.readObject() as int;
 			this.client_cer = input.readObject() as int;
 			this.client_type = input.readObject() as String;
@@ -108,7 +108,7 @@
 		{
 			output.writeObject(this.name);
 			output.writeObject(this.address);
-			output.writeObject(this.vote_status);
+			output.writeObject(this.status);
 			output.writeObject(this.client_id);
 			output.writeObject(this.client_cer);
 			output.writeObject(this.client_type);

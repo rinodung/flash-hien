@@ -71,7 +71,7 @@
 		private var video_playback:Video;
 		private var video_voteback:Video;
 		private var mic:Microphone;
-		
+		private var cam:Camera;	
 		//SharedObject
 		public var so_ol:SharedObject;
 		public var so_name:String="OnlineList";
@@ -93,9 +93,9 @@
 			registerClassAlias("org.red5.core.Client",Client);
 
 			//NET CONNECTION
-			nc = new NetConnection();			
-			nc.client = { onBWDone: function():void{ trace("onBWDone") } };
-			nc.addEventListener(NetStatusEvent.NET_STATUS , netStatus);
+			this.nc = new NetConnection();			
+			this.nc.client = { onBWDone: function():void{ trace("onBWDone") } };
+			this.nc.addEventListener(NetStatusEvent.NET_STATUS , netStatus);
 			loaderComplete();				
 			
 		}		
@@ -138,6 +138,26 @@
 								   new Chair(904,591)];
 				
 				this.icon_position = "-1";
+				/*
+				var numCam:int = Camera.names.indexOf("XSplitBroadcaster",0);
+				if (numCam != -1)
+				{
+					cam = Camera.getCamera(numCam.toString());
+				}
+				else
+				{
+					cam = Camera.getCamera();
+				}
+	
+				this.cam.setMode(50,50, 15);
+				this.cam.setQuality(0,90);
+				*/
+				this.mic = Microphone.getMicrophone();
+				
+				this.video_voteback = new Video(5,5);
+				this.video_voteback.x = 10;
+				this.video_voteback.y = 10;
+				this.video_voteback.visible = false;
 				
 				
 		}//end loadcomplete
@@ -184,6 +204,9 @@
 				this.setSetOldChair(users);
 				// Set New Chair
 				this.setNewChair(users);
+				
+				// Set Status
+				this.setStatus(users);
 					
 			}
 			
@@ -200,8 +223,7 @@
 				if(tmpChair.avatar) {
 					this.removeChild(tmpChair.avatar);
 					tmpChair.avatar = null;
-				}
-				
+				}				
 			
 			}	
 			
@@ -236,6 +258,57 @@
 			} //end for
 			
 		}
+		
+		// Set Old Chair to empty room
+		public function setStatus(users:Array): void {			
+			var avatar: MovieClip;
+			var user:Client;			
+			for(var i:String in users){
+				
+				//Anh xa client java red5 => client actionscript 3
+				user = users[i] as Client;	
+				avatar = this.getAvatarByUserId(user.client_cer);
+				if(avatar == null) continue;
+				
+				avatar.gotoAndStop(user.status);
+				
+				
+				// 4. user dang phat bieu 
+				if(user.status == 3) {
+					// Neu la minh
+					if(user.client_cer == this.user_id){
+						
+						this.ns_voteback = new NetStream(this.nc);
+						this.ns_voteback.addEventListener(NetStatusEvent.NET_STATUS, handleStreamStatus);
+						//this.ns_voteback.inBufferSeek = true;
+						this.ns_voteback.attachAudio(mic);						
+						//this.ns_voteback.attachCamera(cam);
+						this.ns_voteback.publish(user.client_cer, "live");
+						
+						this.video_voteback.attachNetStream(ns_voteback);
+						this.addChild(this.video_voteback);
+						trace("Client has been publish stream: " + user.client_cer);
+					}else { //neu khong la minh
+						this.ns_voteback = new NetStream(this.nc);
+						this.ns_voteback.addEventListener(NetStatusEvent.NET_STATUS, handleStreamStatus);
+						//this.ns_voteback.inBufferSeek = true;						
+						this.ns_voteback.play(user.client_cer, -1);						
+						this.video_voteback.attachNetStream(ns_voteback);
+						this.addChild(this.video_playback);
+						trace("Client has been Subscribe stream: " + user.client_cer);
+					}
+					
+				} else {
+					if(this.ns_voteback != null) {
+						this.ns_voteback.close();
+					}
+					
+				}
+				
+			} //end for
+			
+		}
+		
 		/**
 		Tao so random tu max - min
 		*/
@@ -339,6 +412,15 @@
 			this.nc.call("sendCommand",responder,scope,command,this.user_id,args);
 		}
 		
+		// Notify Position to Server 
+		public function notifyStatus(status:String): void{
+			var scope:String="room" + this.room_id;
+			var command:String="setStatus";
+			var args:String = status;
+			var responder:Responder = new Responder(on_set_position_complete, on_set_position_fail);
+			this.nc.call("sendCommand",responder,scope,command,this.user_id,args);
+		}
+		
 		
 		private function on_set_position_complete(result:Object):void
 		{
@@ -420,9 +502,7 @@
 			this.user_name = "Sinh vien " + this.user_id;
 			this.type_client = "sv";
 			this.icon_name = this.txt_inputten.text;
-			//var tendn = this.txt_inputten.text;
-			//var a= tendn.text + "_mc";
-			//trace (tendn);
+			
 			//var avatar = new ava1_mc();
 			trace(this.txt_inputten.text + " " + this.txt_inputmk.text);
 			gotoAndStop(2);
@@ -449,12 +529,12 @@
 			if(avatar == null) {
 				return;
 			}
-			if(avatar.currentFrame != 3) {
-				avatar.gotoAndStop(3);
-			} else {
-				avatar.gotoAndStop(1);
-			}
-			
+			// 
+			if(avatar.currentFrame != 2) {				
+				this.notifyStatus("vote");
+			} else {								
+				this.notifyStatus("canvote");
+			}			
 		}
 		
 		// ham btn_talk_click
@@ -484,20 +564,8 @@
 			}
 			
 		}
-		// ham xem mnh o dau
-		public function ham_checkme(event: MouseEvent):void{
-			var avatar:MovieClip = this.getAvatarByUserId(this.user_id);
-			if(avatar == null) {
-				return;
-			}
-			if(avatar.currentFrame == 1) {
-				avatar.gotoAndStop(2);
-			} else {
-				avatar.gotoAndStop(1);
-			}
-			
-		}
 		
+		// thay đổi trạng thái avatar (giơ tay)		
 		public function updataAvatar(avatar:MovieClip): void{
 			
 			if(avatar.currentFrame == 1) {
@@ -517,18 +585,13 @@
 		{
 			this.ns_playback = new NetStream(nc);
 			this.ns_playback.addEventListener(NetStatusEvent.NET_STATUS, handleStreamStatus);
-			//this.video_voteback = new Video(5,5);
-			//this.video_voteback.x = 15;
-			//this.video_voteback.y = 5;
-			//this.mc1 = new MovieClip();
+			
 			this.video_playback = new Video(600,300);
 			this.video_playback.x = 260;
 			this.video_playback.y = 120;
 			this.video_playback.attachNetStream(ns_playback);
 			this.ns_playback.play(this.room_id, -1);
-		//	video_playback.clear();
-		//	mc1.addChild(video_playback);
-		//	mc1.addEventListener(MouseEvent.CLICK, fullscreen);
+		
 			this.addChild(video_playback);
 		}
 		
