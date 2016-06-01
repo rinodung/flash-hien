@@ -125,10 +125,10 @@
 		
 		public function loaderComplete():void	{		
 				// init chair array
-				this.chairArray = [new Chair(457,393),
-								   new Chair(627,393), 
-								   new Chair(797,393), 
-								   new Chair(240,488),
+				this.chairArray = [new Chair(320,462),
+								   new Chair(420,462), 
+								   new Chair(530,462), 
+								   new Chair(660,462),
 								   new Chair(424,488), 
 								   new Chair(658,488), 
 								   new Chair(852,488), 
