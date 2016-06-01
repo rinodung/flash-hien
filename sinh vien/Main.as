@@ -427,6 +427,8 @@
 			trace(this.txt_inputten.text + " " + this.txt_inputmk.text);
 			gotoAndStop(2);
 			this.btn_vote.addEventListener(MouseEvent.CLICK,btn_vote_click);
+			this.btn_talk.addEventListener(MouseEvent.CLICK,btn_talk_click);
+			this.btn_shook.addEventListener(MouseEvent.CLICK,btn_shook_click);
 			this.btn_dangxuat.addEventListener(MouseEvent.CLICK, ham_dangxuat);
 			
 			connect();
@@ -449,6 +451,34 @@
 			}
 			if(avatar.currentFrame != 3) {
 				avatar.gotoAndStop(3);
+			} else {
+				avatar.gotoAndStop(1);
+			}
+			
+		}
+		
+		// ham btn_talk_click
+		public function btn_talk_click (event: MouseEvent):void{
+			var avatar:MovieClip = this.getAvatarByUserId(this.user_id);
+			if(avatar == null) {
+				return;
+			}
+			if(avatar.currentFrame != 4) {
+				avatar.gotoAndStop(4);
+			} else {
+				avatar.gotoAndStop(1);
+			}
+			
+		}
+		
+		// ham btn_shook_click
+		public function btn_shook_click (event: MouseEvent):void{
+			var avatar:MovieClip = this.getAvatarByUserId(this.user_id);
+			if(avatar == null) {
+				return;
+			}
+			if(avatar.currentFrame != 5) {
+				avatar.gotoAndStop(5);
 			} else {
 				avatar.gotoAndStop(1);
 			}
