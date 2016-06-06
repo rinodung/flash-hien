@@ -129,13 +129,12 @@
 								   new Chair(420,462), 
 								   new Chair(530,462), 
 								   new Chair(660,462),
-								   new Chair(424,488), 
-								   new Chair(658,488), 
-								   new Chair(852,488), 
-								   new Chair(158,594), 
-								   new Chair(380,594), 
-								   new Chair(680,586), 
-								   new Chair(904,591)];
+								   new Chair(760,455), 
+								   new Chair(865,455), 
+								   new Chair(150,550), 
+								   new Chair(270,550), 
+								   new Chair(395,550), 
+								   new Chair(525,550)];
 				
 				this.icon_position = "-1";
 				/*
@@ -412,7 +411,7 @@
 			this.nc.call("sendCommand",responder,scope,command,this.user_id,args);
 		}
 		
-		// Notify Position to Server 
+		// Notify Status to Server 
 		public function notifyStatus(status:String): void{
 			var scope:String="room" + this.room_id;
 			var command:String="setStatus";
@@ -509,6 +508,7 @@
 			this.btn_vote.addEventListener(MouseEvent.CLICK,btn_vote_click);
 			this.btn_talk.addEventListener(MouseEvent.CLICK,btn_talk_click);
 			this.btn_shook.addEventListener(MouseEvent.CLICK,btn_shook_click);
+			this.btn_shook.addEventListener(MouseEvent.CLICK,btn_wink_click);
 			this.btn_dangxuat.addEventListener(MouseEvent.CLICK, ham_dangxuat);
 			
 			connect();
@@ -543,8 +543,8 @@
 			if(avatar == null) {
 				return;
 			}
-			if(avatar.currentFrame != 4) {
-				avatar.gotoAndStop(4);
+			if(avatar.currentFrame != 3) {
+				avatar.gotoAndStop(3);
 			} else {
 				avatar.gotoAndStop(1);
 			}
@@ -557,14 +557,29 @@
 			if(avatar == null) {
 				return;
 			}
-			if(avatar.currentFrame != 5) {
-				avatar.gotoAndStop(5);
-			} else {
-				avatar.gotoAndStop(1);
-			}
+			// 
+			if(avatar.currentFrame != 4) {				
+				this.notifyStatus("shook");
+			} else {								
+				this.notifyStatus("canvote");
+			}			
 			
 		}
 		
+		// ham btn_wink_click
+		public function btn_wink_click (event: MouseEvent):void{
+			var avatar:MovieClip = this.getAvatarByUserId(this.user_id);
+			if(avatar == null) {
+				return;
+			}
+			// 
+			if(avatar.currentFrame != 5) {				
+				this.notifyStatus("wink");
+			} else {								
+				this.notifyStatus("canvote"); // cancel vote tương đương frame số 1
+			}			
+			
+		}
 		// thay đổi trạng thái avatar (giơ tay)		
 		public function updataAvatar(avatar:MovieClip): void{
 			
