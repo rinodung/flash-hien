@@ -16,6 +16,8 @@
 	import flash.events.StatusEvent;
 	import flash.events.SyncEvent;
 	import flash.events.TimerEvent;
+	import flash.utils.Timer;
+    
 	import flash.external.ExternalInterface;
 	import flash.geom.Rectangle;
 	import flash.media.Camera;
@@ -62,6 +64,7 @@
 		public var dem:int;
 		public var icon_name: String;
 		public var icon_position: String;
+		public var icon_action: String;
 		public var tenMH:String;
 		//public var btn_vote:fl.controls.Button;
 		
@@ -79,6 +82,11 @@
 		// Chair Array
 		public var chairArray: Array;
 		public var avatarArray: Array;
+		public var avatarAction:Array;
+		
+		//global temp
+		public var tmpAvatar:MovieClip;
+		public var tmpIconAction:String;
 		public function Main() {
 			
 			this.init();			
@@ -137,6 +145,7 @@
 								   new Chair(525,550)];
 				
 				this.icon_position = "-1";
+				this.icon_action = "4";
 				/*
 				var numCam:int = Camera.names.indexOf("XSplitBroadcaster",0);
 				if (numCam != -1)
@@ -164,7 +173,7 @@
 		
 		public function connect(){
 				trace("Connecting to: " + this.input_host + " " + this.user_name + " " + this.user_id + " " + this.icon_name);
-				this.nc.connect(this.input_host, this.user_name, this.user_id, this.type_client, this.icon_name, this.icon_position);			
+				this.nc.connect(this.input_host, this.user_name, this.user_id, this.type_client, this.icon_name, this.icon_position, this.icon_action);			
 				
 				//Register to ShareObject OnlineList Red5
 				this.so_ol=SharedObject.getRemote(this.so_name,this.nc.uri,false);
@@ -206,7 +215,8 @@
 				
 				// Set Status
 				this.setStatus(users);
-					
+				
+				
 			}
 			
 		}//end update_online_list	
@@ -268,9 +278,9 @@
 				user = users[i] as Client;	
 				avatar = this.getAvatarByUserId(user.client_cer);
 				if(avatar == null) continue;
+				avatar.gotoAndStop(user.status);				
 				
-				avatar.gotoAndStop(user.status);
-				
+				this.setAvatarAction(user);
 				
 				// 4. user dang phat bieu 
 				if(user.status == 3) {
@@ -308,10 +318,38 @@
 			
 		}
 		
+		function setAvatarAction(user:Client):void{
+			
+			this.tmpAvatar = this.getAvatarByUserId(user.client_cer);
+			this.tmpIconAction = user.client_icon_action;			
+           
+			var ChairTimer:Timer = this.getTimerByUserId(user.client_cer);
+			if(ChairTimer != null) {
+				
+				ChairTimer.removeEventListener(TimerEvent.TIMER, timerHandler);
+			} else {
+				ChairTimer =  new Timer(5000);
+			}
+			
+			
+			ChairTimer.addEventListener(TimerEvent.TIMER, timerHandler);
+            ChairTimer.start();
+			
+		}
+		
+		public function timerHandler(event:TimerEvent):void {
+			var avatar_action_array: Array = this.tmpIconAction.split(",");
+			var avatar_random_index: int = Math.round(randomRange(avatar_action_array.length-1,0));
+			var avatar_random_frame: Number = avatar_action_array[avatar_random_index];
+			this.tmpAvatar.gotoAndStop(avatar_random_frame);
+			trace("timerHandler: " + this.tmpIconAction + "=>setAvatarAction: " + avatar_random_frame);
+           
+        }
 		/**
 		Tao so random tu max - min
 		*/
 		function randomRange(max:Number, min:Number = 0):Number	{
+			
 				return Math.random() * (max - min) + min;
 		}
 		
@@ -402,6 +440,17 @@
 			return result;
 		}// end getEmptyChairIndex
 		
+		// Get Avatar Movie clip by user id
+		public function getTimerByUserId(userId:String): Timer {
+			var result:Timer= null;
+			for(var i:String in this.chairArray){
+				if(this.chairArray[i].id == userId) {
+					return this.chairArray[i].timer;		
+				}				
+			}
+			return result;
+		}// end getEmptyChairIndex
+		
 		// Notify Position to Server 
 		public function notifyPosition(newChairIndex:String): void{
 			var scope:String="room" + this.room_id;
@@ -416,6 +465,15 @@
 			var scope:String="room" + this.room_id;
 			var command:String="setStatus";
 			var args:String = status;
+			var responder:Responder = new Responder(on_set_position_complete, on_set_position_fail);
+			this.nc.call("sendCommand",responder,scope,command,this.user_id,args);
+		}
+		
+		// Notify Status to Server 
+		public function notifyAvatarAction(action:String): void{
+			var scope:String="room" + this.room_id;
+			var command:String="setAvatarAction";
+			var args:String = action;
 			var responder:Responder = new Responder(on_set_position_complete, on_set_position_fail);
 			this.nc.call("sendCommand",responder,scope,command,this.user_id,args);
 		}
@@ -441,48 +499,7 @@
 			trace("Client cer:" + comArray[1]);
 			var clientCer:String = comArray[1];
 			var command:String = comArray[0];
-			/*
-			if(command == "accept")
-			{
-				if(clientCer == masv)
-				{
-					btn_vote.gotoAndStop(4);
-					ns_voteback = new NetStream(nc);
-					ns_voteback.addEventListener(NetStatusEvent.NET_STATUS, handleStreamStatus);
-					ns_voteback.inBufferSeek = true;
-					ns_voteback.attachAudio(mic);
-					video_voteback.attachNetStream(ns_voteback);
-					ns_voteback.publish(clientCer, "live");
-					trace("Client has been publish stream: " + masv);
-				}else
-				{
-					ns_voteback = new NetStream(nc);
-					ns_voteback.addEventListener(NetStatusEvent.NET_STATUS, handleStreamStatus);
-			//		ns_voteback.inBufferSeek = true;
-					video_voteback.attachNetStream(ns_voteback);
-					ns_voteback.play(clientCer, -1);
-					trace("Client has been Subscribe stream: " + masv);
-				}
-			}
 			
-			if(command =="reject")
-			{
-				btn_vote.gotoAndStop(2);
-				if(ns_voteback != null) {
-					ns_voteback.close();
-				}
-				trace("All client has been remove stream");
-			}
-			
-			if(command == "stopvote") {
-				btn_vote.gotoAndStop(2);
-				if(ns_voteback != null) {
-					ns_voteback.close();
-				}
-				
-				trace("Stop vote");
-			}		
-			*/
 			if(command == "setPosition") {
 				
 				trace("Send Message: " + command);
@@ -510,10 +527,43 @@
 			this.btn_shook.addEventListener(MouseEvent.CLICK,btn_shook_click);
 			this.btn_shook.addEventListener(MouseEvent.CLICK,btn_wink_click);
 			this.btn_dangxuat.addEventListener(MouseEvent.CLICK, ham_dangxuat);
-			
+			this.cb_4.addEventListener(MouseEvent.CLICK, check_avatar_action);
+			this.cb_5.addEventListener(MouseEvent.CLICK, check_avatar_action);
+			this.cb_6.addEventListener(MouseEvent.CLICK, check_avatar_action);
+			this.cb_7.addEventListener(MouseEvent.CLICK, check_avatar_action);
+			this.cb_8.addEventListener(MouseEvent.CLICK, check_avatar_action);
 			connect();
 					
 		}// end ham_dang nhap
+		
+		// ham dang xuat
+		public function check_avatar_action (event: MouseEvent):void{
+			this.icon_action = "";
+			if(this.cb_4.selected) {
+				this.icon_action+="4,";
+			} 
+			if(this.cb_5.selected) {
+				this.icon_action+="5,";
+			} 
+			if(this.cb_6.selected) {
+				this.icon_action+="6,";
+			} 
+			if(this.cb_7.selected) {
+				this.icon_action+="7,";
+			} 
+			if(this.cb_8.selected) {
+				this.icon_action+="8,";
+			} 
+			
+			if(this.icon_action == "") {
+				this.icon_action = "4";
+				this.cb_4.selected = true;
+			} else {
+				this.icon_action = this.icon_action.substr(0,this.icon_action.length-1);
+			}
+			this.notifyAvatarAction(this.icon_action);
+			
+		}
 		
 		// ham dang xuat
 		public function ham_dangxuat (event: MouseEvent):void{

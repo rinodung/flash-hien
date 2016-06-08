@@ -66,12 +66,14 @@
 		//public var btn_vote:fl.controls.Button;
 		
 		// Video  var
-		private var ns_playback:NetStream;
-		private var ns_voteback:NetStream;
-		private var video_playback:Video;
+		private var video_publish:Video;
 		private var video_voteback:Video;
+		private var ns_voteback:NetStream;
+		private var ns_publish:NetStream;
+		private var cam:Camera;
 		private var mic:Microphone;
-		private var cam:Camera;	
+		private var h264Settings:H264VideoStreamSettings;
+		private var options:MicrophoneEnhancedOptions;
 		//SharedObject
 		public var so_ol:SharedObject;
 		public var so_name:String="OnlineList";
@@ -109,7 +111,8 @@
 						break;
 					case "NetConnection.Connect.Success":
 						trace("Success");
-						playbackVideo();
+						this.publishVideo();
+						this.video_publish.attachCamera(this.cam);
 						break;
 					case "NetConnection.Connect.Closed":
 						
@@ -138,21 +141,44 @@
 								
 				
 				this.icon_position = "-1";
-				/*
+				
+				h264Settings = new H264VideoStreamSettings();
+				h264Settings.setProfileLevel(H264Profile.BASELINE, H264Level.LEVEL_4);
+				options = new MicrophoneEnhancedOptions();
+				options.mode = MicrophoneEnhancedMode.OFF;
+				options.echoPath = 128;
+				options.nonLinearProcessing = false;
+				options.autoGain = false;
+				
 				var numCam:int = Camera.names.indexOf("XSplitBroadcaster",0);
 				if (numCam != -1)
 				{
-					cam = Camera.getCamera(numCam.toString());
+					this.cam = Camera.getCamera(numCam.toString());
 				}
 				else
 				{
-					cam = Camera.getCamera();
+					this.cam = Camera.getCamera();
 				}
 	
-				this.cam.setMode(50,50, 15);
+				this.cam.setMode(1000, 450, 15);
 				this.cam.setQuality(0,90);
-				*/
+	
+				this.mic = Microphone.getEnhancedMicrophone();
+	
+				this.mic.codec = SoundCodec.SPEEX;
+				this.mic.framesPerPacket = 1;
+				this.mic.setSilenceLevel(0, 2000);
+				this.mic.gain = 50;
+				this.mic.setLoopBack(false);
+				this.mic.enhancedOptions = options;
+				
 				this.mic = Microphone.getMicrophone();
+				
+				this.video_publish = new Video(800,360);
+				this.video_publish.x = 9;
+				this.video_publish.y = 100;
+	
+				//this.addChild(this.video_publish);
 				
 				this.video_voteback = new Video(5,5);
 				this.video_voteback.x = 10;
@@ -276,27 +302,15 @@
 				// 4. user dang phat bieu 
 				if(user.status == 3) {
 					// Neu la minh
-					if(user.client_cer == this.user_id){
-						
-						this.ns_voteback = new NetStream(this.nc);
-						this.ns_voteback.addEventListener(NetStatusEvent.NET_STATUS, handleStreamStatus);
-						//this.ns_voteback.inBufferSeek = true;
-						this.ns_voteback.attachAudio(mic);						
-						//this.ns_voteback.attachCamera(cam);
-						this.ns_voteback.publish(user.client_cer, "live");
-						
-						this.video_voteback.attachNetStream(ns_voteback);
-						this.addChild(this.video_voteback);
-						trace("Client has been publish stream: " + user.client_cer);
-					}else { //neu khong la minh
+					
 						this.ns_voteback = new NetStream(this.nc);
 						this.ns_voteback.addEventListener(NetStatusEvent.NET_STATUS, handleStreamStatus);
 						//this.ns_voteback.inBufferSeek = true;						
 						this.ns_voteback.play(user.client_cer, -1);						
 						this.video_voteback.attachNetStream(ns_voteback);
-						this.addChild(this.video_playback);
+						this.addChild(this.video_voteback);
 						trace("Client has been Subscribe stream: " + user.client_cer);
-					}
+					
 					
 				} else {
 					if(this.ns_voteback != null) {
@@ -330,8 +344,26 @@
 			else if (user.client_icon_name=="ava3"){
 					avatar = new ava3_mc();					
 			}
-			else{
+			else if (user.client_icon_name=="ava4"){ 
 					avatar = new ava4_mc();					
+			}
+			else if (user.client_icon_name=="ava5") {
+					avatar = new ava5_mc();					
+			}
+			else if (user.client_icon_name=="ava6"){
+					avatar = new ava6_mc();					
+			}
+			else if (user.client_icon_name=="ava7"){ 
+					avatar = new ava7_mc();					
+			}
+			else if (user.client_icon_name=="ava8") {
+					avatar = new ava8_mc();					
+			}
+			else if (user.client_icon_name=="ava9") {
+					avatar = new ava9_mc();					
+			}
+			else { 
+					avatar = new ava10_mc();					
 			}
 			
 			var position = user.client_icon_position;
@@ -499,8 +531,8 @@
 			this.input_host = "rtmp://127.0.0.1:1935/firstapp/room"+ this.room_id;			
 			
 			this.user_id = randomRange(5000,2).toString(4);
-			this.user_name = "Sinh vien " + this.user_id;
-			this.type_client = "sv";
+			this.user_name = "Giao Vien " + this.user_id;
+			this.type_client = "gv";
 			this.icon_name = this.txt_inputten.text;
 			
 			//var avatar = new ava1_mc();
@@ -596,20 +628,17 @@
 		{
 			trace("button clicked:", event.currentTarget.i)
 		}
-		
-		private function playbackVideo():void
+		private function publishVideo():void
 		{
-			this.ns_playback = new NetStream(nc);
-			this.ns_playback.addEventListener(NetStatusEvent.NET_STATUS, handleStreamStatus);
-			
-			this.video_playback = new Video(600,300);
-			this.video_playback.x = 260;
-			this.video_playback.y = 120;
-			this.video_playback.attachNetStream(ns_playback);
-			this.ns_playback.play(this.room_id, -1);
-		
-			this.addChild(video_playback);
+			this.ns_publish = new NetStream(this.nc);
+			this.ns_publish.addEventListener(NetStatusEvent.NET_STATUS, netStatus);
+			this.ns_publish.attachCamera(this.cam);
+			this.ns_publish.attachAudio(this.mic);
+			this.ns_publish.videoStreamSettings = h264Settings;
+			this.ns_publish.publish(room_id, "live");			
 		}
+		
+		
 		
 		private function handleStreamStatus(e:NetStatusEvent):void {
 			switch(e.info.code) {

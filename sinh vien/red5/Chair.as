@@ -1,7 +1,8 @@
 ﻿package red5
 {
 	import flash.display.MovieClip;
-
+	import flash.utils.Timer;
+    import flash.events.TimerEvent;
 	public class Chair
 	{
 		protected var _x:Number;
@@ -9,6 +10,7 @@
 		protected var _status:Boolean;
 		protected var _id:Number;
 		protected var _avatar:MovieClip;
+		protected var _timer:Timer;
 		/**
 		   Creates a new Point3d.
 		   @param x: The horizontal coordinate of the point.
@@ -16,13 +18,14 @@
 		   @param id: chair id.
 		   @param status: false/true status chair.
 		 */
-		public function Chair(x:Number = 0, y:Number = 0, id:Number = 0, status:Boolean = false, avatar:MovieClip= null)
+		public function Chair(x:Number = 0, y:Number = 0, id:Number = 0, status:Boolean = false, avatar:MovieClip= null, timer:Timer= null)
 		{
 			this._x = x;
 			this._y = y;
 			this._id = id;
 			this._status = status;
 			this.avatar= avatar;
+			this.timer = timer;
 		}
 
 		/**
@@ -88,6 +91,19 @@
 		public function set avatar(avatar:MovieClip):void
 		{
 			this._avatar = avatar;
+		}
+		
+		/**
+		   The timer object of chair.
+		 */
+		public function get timer():Timer
+		{
+			return this._timer;
+		}
+
+		public function set timer(timer:Timer):void
+		{
+			this._timer = timer;
 		}
 	}
 }
