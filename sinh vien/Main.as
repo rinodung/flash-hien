@@ -231,7 +231,8 @@
 				tmpChair.status = false;
 				if(tmpChair.avatar) {
 					this.removeChild(tmpChair.avatar);
-					tmpChair.avatar = null;
+					tmpChair.avatar = null;					
+					
 				}				
 			
 			}	
@@ -318,33 +319,56 @@
 			
 		}
 		
-		function setAvatarAction(user:Client):void{
+		//Set random Avatar for Flash
+		function setAvatarAction(user:Client):void{		
+			if(user.client_icon_position == "-1") return;
 			
-			this.tmpAvatar = this.getAvatarByUserId(user.client_cer);
-			this.tmpIconAction = user.client_icon_action;			
-           
-			var ChairTimer:Timer = this.getTimerByUserId(user.client_cer);
-			if(ChairTimer != null) {
+								
+           	var tmpChair:Chair = this.chairArray[user.client_icon_position];			
+			
+			
+			
+			if(tmpChair.icon_action != user.client_icon_action) {				
+				if(tmpChair.timer !=null) {					
+					tmpChair.timer.stop();
+				}
+				var avatar_random_time: int = randomRange(10,5) * 1000; // milisecond
+				tmpChair.timer =  new Timer(avatar_random_time);				 
+				tmpChair.icon_action = user.client_icon_action;
+				trace("avatar Action Timer Random: " + avatar_random_time);
+				tmpChair.timer.addEventListener(TimerEvent.TIMER, avatarActionTimerHandler(user, this.chairArray));
 				
-				ChairTimer.removeEventListener(TimerEvent.TIMER, timerHandler);
-			} else {
-				ChairTimer =  new Timer(5000);
-			}
+			}		
 			
-			
-			ChairTimer.addEventListener(TimerEvent.TIMER, timerHandler);
-            ChairTimer.start();
+            tmpChair.timer.start();
+				
 			
 		}
 		
-		public function timerHandler(event:TimerEvent):void {
-			var avatar_action_array: Array = this.tmpIconAction.split(",");
-			var avatar_random_index: int = Math.round(randomRange(avatar_action_array.length-1,0));
-			var avatar_random_frame: Number = avatar_action_array[avatar_random_index];
-			this.tmpAvatar.gotoAndStop(avatar_random_frame);
-			trace("timerHandler: " + this.tmpIconAction + "=>setAvatarAction: " + avatar_random_frame);
-           
-        }
+		function avatarActionTimerHandler(user:Client, chairArray:Array):Function {
+			
+			
+			return function(e:TimerEvent):void {
+				var iconAction:String = user.client_icon_action;						
+				var tmpChair:Chair = chairArray[user.client_icon_position];
+				var chairTimer:Timer = tmpChair.timer;
+				
+				
+				var avatar_action_array: Array = iconAction.split(",");
+				var avatar_random_index: int = Math.round(randomRange(avatar_action_array.length-1,0));
+				var avatar_random_frame: Number = avatar_action_array[avatar_random_index];
+				if(tmpChair.avatar == null) {
+					tmpChair.timer.stop();
+					trace("avatar Action " + user.client_icon_name +" stop");
+				} else {
+					tmpChair.avatar.gotoAndStop(avatar_random_frame);
+					trace("avatar Action " + user.client_icon_name + " TimerHandler: " + iconAction + "=>setAvatarAction: " + avatar_random_frame);
+				}
+				
+			};
+		}
+		
+		
 		/**
 		Tao so random tu max - min
 		*/
@@ -446,6 +470,17 @@
 			for(var i:String in this.chairArray){
 				if(this.chairArray[i].id == userId) {
 					return this.chairArray[i].timer;		
+				}				
+			}
+			return result;
+		}// end getEmptyChairIndex
+		
+		// Get chair  by user id
+		public function getChairByUserId(userId:String): Chair {
+			var result:Chair= null;
+			for(var i:String in this.chairArray){
+				if(this.chairArray[i].id == userId) {
+					return this.chairArray[i];		
 				}				
 			}
 			return result;
