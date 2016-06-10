@@ -87,6 +87,19 @@
 		//global temp
 		public var tmpAvatar:MovieClip;
 		public var tmpIconAction:String;
+		
+		//Constant
+		public static const AVATAR_NORMAL:int = 1; 
+		public static const AVATAR_VOTE:int = 2;
+		public static const AVATAR_TALK:int = 3;
+		public static const AVATAR_WINK:int = 4;
+		public static const AVATAR_SHOOK_LEFT:int = 5;
+		public static const AVATAR_SHOOK_RIGHT:int = 6;
+		public static const AVATAR_WRITTING:int = 7;
+		public static const AVATAR_SLEEP:int = 8;
+		
+		public static const AVATAR_TIMEOUT_MAXIMUM:int = 6;
+		public static const AVATAR_TIMEOUT_MINIMUM:int = 2;
 		public function Main() {
 			
 			this.init();			
@@ -281,6 +294,7 @@
 				if(avatar == null) continue;
 				avatar.gotoAndStop(user.status);				
 				
+				// xu ly hinh anh
 				this.setAvatarAction(user);
 				
 				// 4. user dang phat bieu 
@@ -332,16 +346,37 @@
 				if(tmpChair.timer !=null) {					
 					tmpChair.timer.stop();
 				}
-				var avatar_random_time: int = randomRange(10,5) * 1000; // milisecond
+				var avatar_random_time: int = randomRange(Main.AVATAR_TIMEOUT_MAXIMUM, Main.AVATAR_TIMEOUT_MINIMUM) * 1000; // milisecond
 				tmpChair.timer =  new Timer(avatar_random_time);				 
 				tmpChair.icon_action = user.client_icon_action;
 				trace("avatar Action Timer Random: " + avatar_random_time);
 				tmpChair.timer.addEventListener(TimerEvent.TIMER, avatarActionTimerHandler(user, this.chairArray));
 				
-			}		
+			}
+			//Neu ma gio tay, hoac la phat bieu
+			if(user.status == Main.AVATAR_VOTE ) {
+				tmpChair.timer.stop();
+			} else if(user.status == Main.AVATAR_TALK) {
+				this.stopAllChairTimer(user.client_cer);
+			} else {
+				tmpChair.timer.start();
+			}
 			
-            tmpChair.timer.start();
-				
+		}
+		
+		// Reset All Chair to empty room
+		public function stopAllChairTimer(user_id:String): void {
+			
+			for(var c:String in this.chairArray){
+				var tmpChair:Chair = this.chairArray[c];			
+				if(tmpChair.timer ) {
+					tmpChair.timer.stop();					
+				}
+				if(tmpChair.avatar && tmpChair.id != int(user_id)) {
+					tmpChair.avatar.gotoAndStop(Main.AVATAR_NORMAL);
+				}
+			
+			}	
 			
 		}
 		
@@ -558,9 +593,9 @@
 			trace(this.txt_inputten.text + " " + this.txt_inputmk.text);
 			gotoAndStop(2);
 			this.btn_vote.addEventListener(MouseEvent.CLICK,btn_vote_click);
-			this.btn_talk.addEventListener(MouseEvent.CLICK,btn_talk_click);
-			this.btn_shook.addEventListener(MouseEvent.CLICK,btn_shook_click);
-			this.btn_shook.addEventListener(MouseEvent.CLICK,btn_wink_click);
+			//this.btn_talk.addEventListener(MouseEvent.CLICK,btn_talk_click);
+			//this.btn_shook.addEventListener(MouseEvent.CLICK,btn_shook_click);
+			//this.btn_shook.addEventListener(MouseEvent.CLICK,btn_wink_click);
 			this.btn_dangxuat.addEventListener(MouseEvent.CLICK, ham_dangxuat);
 			this.cb_4.addEventListener(MouseEvent.CLICK, check_avatar_action);
 			this.cb_5.addEventListener(MouseEvent.CLICK, check_avatar_action);

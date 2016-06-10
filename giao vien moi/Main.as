@@ -81,7 +81,19 @@
 		
 		// Chair Array
 		public var chairArray: Array;
-		public var avatarArray: Array;
+		public var avatarArray: Array;		
+		
+		//Constant
+		public static const AVATAR_NORMAL:int = 1; 
+		public static const AVATAR_VOTE:int = 2;
+		public static const AVATAR_TALK:int = 3;
+		public static const AVATAR_WINK:int = 4;
+		public static const AVATAR_SHOOK_LEFT:int = 5;
+		public static const AVATAR_SHOOK_RIGHT:int = 6;
+		public static const AVATAR_WRITTING:int = 7;
+		public static const AVATAR_SLEEP:int = 8;
+		public static const AVATAR_TIMEOUT_MAXIMUM:int = 6;
+		public static const AVATAR_TIMEOUT_MINIMUM:int = 2;
 		public function Main() {
 			
 			this.init();			
@@ -338,16 +350,38 @@
 				if(tmpChair.timer !=null) {					
 					tmpChair.timer.stop();
 				}
-				var avatar_random_time: int = randomRange(10,5) * 1000; // milisecond
+				var avatar_random_time: int = randomRange(Main.AVATAR_TIMEOUT_MAXIMUM, Main.AVATAR_TIMEOUT_MINIMUM) * 1000; // milisecond
 				tmpChair.timer =  new Timer(avatar_random_time);				 
 				tmpChair.icon_action = user.client_icon_action;
 				trace("avatar Action Timer Random: " + avatar_random_time);
 				tmpChair.timer.addEventListener(TimerEvent.TIMER, avatarActionTimerHandler(user, this.chairArray));
 				
 			}		
-			
-            tmpChair.timer.start();
+			//Neu ma gio tay, hoac la phat bieu
+			if(user.status == Main.AVATAR_VOTE ) {
+				tmpChair.timer.stop();
+			} else if(user.status == Main.AVATAR_TALK) {
+				this.stopAllChairTimer(user.client_cer);
+			} else {
+				tmpChair.timer.start();
+			}
 				
+			
+		}
+		
+		// Reset All Chair to empty room
+		public function stopAllChairTimer(user_id:String): void {
+			
+			for(var c:String in this.chairArray){
+				var tmpChair:Chair = this.chairArray[c];			
+				if(tmpChair.timer ) {
+					tmpChair.timer.stop();					
+				}
+				if(tmpChair.avatar && tmpChair.id != int(user_id)) {
+					tmpChair.avatar.gotoAndStop(Main.AVATAR_NORMAL);
+				}
+			
+			}	
 			
 		}
 		
@@ -449,6 +483,8 @@
 							
 				avatar.x =tmpChair.x;
 				avatar.y =tmpChair.y;
+				avatar.addEventListener(MouseEvent.CLICK, avatarClickHandler);
+				avatar.user = user;
 				tmpChair.status = true;
 				tmpChair.id = user.client_cer;
 				tmpChair.avatar = avatar;
@@ -463,6 +499,37 @@
 			
 			return avatar;
 		} // end setChairPorition
+		
+		function avatarClickHandler(event:MouseEvent):void {
+			var currentUser:Client =  event.currentTarget.user;
+			if(currentUser == null) return;
+			
+			var tmpChair:Chair = this.getChairByUserId(currentUser.client_cer);
+			var avatar:MovieClip = this.getAvatarByUserId(currentUser.client_cer);
+			if(avatar == null) {
+				return;
+			}
+			// 
+			if(avatar.currentFrame == Main.AVATAR_VOTE) {				
+				this.notifyStatus("accept",currentUser.client_cer);
+			} 			
+			if(avatar.currentFrame == Main.AVATAR_TALK) {				
+				this.notifyStatus("reject",currentUser.client_cer);
+			} 
+			trace("Click: " + currentUser.client_cer);
+			
+		}
+		
+		// Get chair  by user id
+		public function getChairByUserId(userId:String): Chair {
+			var result:Chair= null;
+			for(var i:String in this.chairArray){
+				if(this.chairArray[i].id == userId) {
+					return this.chairArray[i];		
+				}				
+			}
+			return result;
+		}// end getEmptyChairIndex
 		
 		// Get Empty Chair Index
 		public function getEmptyChairIndex(): String {
@@ -496,12 +563,12 @@
 		}
 		
 		// Notify Status to Server 
-		public function notifyStatus(status:String): void{
+		public function notifyStatus(status:String, user_id:String): void{
 			var scope:String="room" + this.room_id;
 			var command:String="setStatus";
 			var args:String = status;
 			var responder:Responder = new Responder(on_set_position_complete, on_set_position_fail);
-			this.nc.call("sendCommand",responder,scope,command,this.user_id,args);
+			this.nc.call("sendCommand",responder,scope,command,user_id,args);
 		}
 		
 		
@@ -588,11 +655,9 @@
 			
 			//var avatar = new ava1_mc();
 			trace(this.txt_inputten.text + " " + this.txt_inputmk.text);
-			gotoAndStop(2);
-			this.btn_vote.addEventListener(MouseEvent.CLICK,btn_vote_click);
-			this.btn_talk.addEventListener(MouseEvent.CLICK,btn_talk_click);
-			this.btn_shook.addEventListener(MouseEvent.CLICK,btn_shook_click);
-			this.btn_shook.addEventListener(MouseEvent.CLICK,btn_wink_click);
+			gotoAndStop(2);	
+			
+			
 			this.btn_dangxuat.addEventListener(MouseEvent.CLICK, ham_dangxuat);
 			
 			connect();
@@ -604,66 +669,9 @@
 			this.nc.close();
 			this.gotoAndStop(1);
 		}
-		//end ham_dang xuat
-	
-	
-		// ham btn_vote_click
-		public function btn_vote_click (event: MouseEvent):void{
-			var avatar:MovieClip = this.getAvatarByUserId(this.user_id);
-			if(avatar == null) {
-				return;
-			}
-			// 
-			if(avatar.currentFrame != 2) {				
-				this.notifyStatus("vote");
-			} else {								
-				this.notifyStatus("canvote");
-			}			
-		}
+		//end ham_dang xuat	
 		
-		// ham btn_talk_click
-		public function btn_talk_click (event: MouseEvent):void{
-			var avatar:MovieClip = this.getAvatarByUserId(this.user_id);
-			if(avatar == null) {
-				return;
-			}
-			if(avatar.currentFrame != 3) {
-				avatar.gotoAndStop(3);
-			} else {
-				avatar.gotoAndStop(1);
-			}
-			
-		}
 		
-		// ham btn_shook_click
-		public function btn_shook_click (event: MouseEvent):void{
-			var avatar:MovieClip = this.getAvatarByUserId(this.user_id);
-			if(avatar == null) {
-				return;
-			}
-			// 
-			if(avatar.currentFrame != 4) {				
-				this.notifyStatus("shook");
-			} else {								
-				this.notifyStatus("canvote");
-			}			
-			
-		}
-		
-		// ham btn_wink_click
-		public function btn_wink_click (event: MouseEvent):void{
-			var avatar:MovieClip = this.getAvatarByUserId(this.user_id);
-			if(avatar == null) {
-				return;
-			}
-			// 
-			if(avatar.currentFrame != 5) {				
-				this.notifyStatus("wink");
-			} else {								
-				this.notifyStatus("canvote"); // cancel vote tương đương frame số 1
-			}			
-			
-		}
 		// thay đổi trạng thái avatar (giơ tay)		
 		public function updataAvatar(avatar:MovieClip): void{
 			
