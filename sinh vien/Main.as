@@ -352,15 +352,19 @@
 				var iconAction:String = user.client_icon_action;						
 				var tmpChair:Chair = chairArray[user.client_icon_position];
 				var chairTimer:Timer = tmpChair.timer;
-				if(tmpChair.avatar == null) {
-					tmpChair.timer.stop();
-				}
+				
 				
 				var avatar_action_array: Array = iconAction.split(",");
 				var avatar_random_index: int = Math.round(randomRange(avatar_action_array.length-1,0));
 				var avatar_random_frame: Number = avatar_action_array[avatar_random_index];
-				tmpChair.avatar.gotoAndStop(avatar_random_frame);
-				trace("avatar Action " + user.client_icon_name + " TimerHandler: " + iconAction + "=>setAvatarAction: " + avatar_random_frame);
+				if(tmpChair.avatar == null) {
+					tmpChair.timer.stop();
+					trace("avatar Action " + user.client_icon_name +" stop");
+				} else {
+					tmpChair.avatar.gotoAndStop(avatar_random_frame);
+					trace("avatar Action " + user.client_icon_name + " TimerHandler: " + iconAction + "=>setAvatarAction: " + avatar_random_frame);
+				}
+				
 			};
 		}
 		
