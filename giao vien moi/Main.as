@@ -336,10 +336,10 @@
 			var avatar = null;
 			if(user.client_icon_name=="ava1"){
 					
-					avatar = new ava1_mc();									
+					avatar = new ava1n_mc();									
 			}
 			else if (user.client_icon_name=="ava2"){
-					avatar = new ava2_mc();
+					avatar = new ava2n_mc();
 			}
 			else if (user.client_icon_name=="ava3"){
 					avatar = new ava3_mc();					
