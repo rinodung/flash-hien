@@ -11,6 +11,7 @@
 		protected var _id:Number;
 		protected var _avatar:MovieClip;
 		protected var _timer:Timer;
+		protected var _icon_action:String;
 		/**
 		   Creates a new Point3d.
 		   @param x: The horizontal coordinate of the point.
@@ -18,7 +19,7 @@
 		   @param id: chair id.
 		   @param status: false/true status chair.
 		 */
-		public function Chair(x:Number = 0, y:Number = 0, id:Number = 0, status:Boolean = false, avatar:MovieClip= null, timer:Timer= null)
+		public function Chair(x:Number = 0, y:Number = 0, id:Number = 0, status:Boolean = false, avatar:MovieClip= null, timer:Timer= null, icon_action:String = "")
 		{
 			this._x = x;
 			this._y = y;
@@ -26,6 +27,7 @@
 			this._status = status;
 			this.avatar= avatar;
 			this.timer = timer;
+			this._icon_action = icon_action;
 		}
 
 		/**
@@ -104,6 +106,19 @@
 		public function set timer(timer:Timer):void
 		{
 			this._timer = timer;
+		}
+		
+		/**
+		   The avatar action of chair.
+		 */
+		public function get icon_action():String
+		{
+			return this._icon_action;
+		}
+
+		public function set icon_action(icon_action:String):void
+		{
+			this._icon_action = icon_action;
 		}
 	}
 }
