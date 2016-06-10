@@ -62,6 +62,7 @@
 		public var dem:int;
 		public var icon_name: String;
 		public var icon_position: String;
+		public var icon_action: String;
 		public var tenMH:String;
 		//public var btn_vote:fl.controls.Button;
 		
@@ -141,7 +142,7 @@
 								
 				
 				this.icon_position = "-1";
-				
+				this.icon_action = "4";
 				h264Settings = new H264VideoStreamSettings();
 				h264Settings.setProfileLevel(H264Profile.BASELINE, H264Level.LEVEL_4);
 				options = new MicrophoneEnhancedOptions();
@@ -191,7 +192,7 @@
 		
 		public function connect(){
 				trace("Connecting to: " + this.input_host + " " + this.user_name + " " + this.user_id + " " + this.icon_name);
-				this.nc.connect(this.input_host, this.user_name, this.user_id, this.type_client, this.icon_name, this.icon_position);			
+				this.nc.connect(this.input_host, this.user_name, this.user_id, this.type_client, this.icon_name, this.icon_position, this.icon_action);						
 				
 				//Register to ShareObject OnlineList Red5
 				this.so_ol=SharedObject.getRemote(this.so_name,this.nc.uri,false);
@@ -298,6 +299,7 @@
 				
 				avatar.gotoAndStop(user.status);
 				
+				this.setAvatarAction(user);
 				
 				// 4. user dang phat bieu 
 				if(user.status == 3) {
@@ -321,6 +323,55 @@
 				
 			} //end for
 			
+		}
+		
+		//Set random Avatar for Flash
+		function setAvatarAction(user:Client):void{		
+			if(user.client_icon_position == "-1") return;
+			
+								
+           	var tmpChair:Chair = this.chairArray[user.client_icon_position];			
+			
+			
+			
+			if(tmpChair.icon_action != user.client_icon_action) {				
+				if(tmpChair.timer !=null) {					
+					tmpChair.timer.stop();
+				}
+				var avatar_random_time: int = randomRange(10,5) * 1000; // milisecond
+				tmpChair.timer =  new Timer(avatar_random_time);				 
+				tmpChair.icon_action = user.client_icon_action;
+				trace("avatar Action Timer Random: " + avatar_random_time);
+				tmpChair.timer.addEventListener(TimerEvent.TIMER, avatarActionTimerHandler(user, this.chairArray));
+				
+			}		
+			
+            tmpChair.timer.start();
+				
+			
+		}
+		
+		function avatarActionTimerHandler(user:Client, chairArray:Array):Function {
+			
+			
+			return function(e:TimerEvent):void {
+				var iconAction:String = user.client_icon_action;						
+				var tmpChair:Chair = chairArray[user.client_icon_position];
+				var chairTimer:Timer = tmpChair.timer;
+				
+				
+				var avatar_action_array: Array = iconAction.split(",");
+				var avatar_random_index: int = Math.round(randomRange(avatar_action_array.length-1,0));
+				var avatar_random_frame: Number = avatar_action_array[avatar_random_index];
+				if(tmpChair.avatar == null) {
+					tmpChair.timer.stop();
+					trace("avatar Action " + user.client_icon_name +" stop");
+				} else {
+					tmpChair.avatar.gotoAndStop(avatar_random_frame);
+					trace("avatar Action " + user.client_icon_name + " TimerHandler: " + iconAction + "=>setAvatarAction: " + avatar_random_frame);
+				}
+				
+			};
 		}
 		
 		/**

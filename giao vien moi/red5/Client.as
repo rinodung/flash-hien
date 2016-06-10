@@ -14,6 +14,7 @@
 		public var client_cer;
 		public var client_type:String;
 		public var client_icon_name:String;
+		public var client_icon_action:String;
 		public var client_icon_position:String;
 		
 		public function setclient_type(type:String)
@@ -71,13 +72,23 @@
 		}
 		
 		// GET/SET client_icon_name
-		public function setClient_icon_nameposition(client_icon_name:String)
+		public function setClient_icon_name(client_icon_name:String)
 		{
 			this.client_icon_name=client_icon_name;
 		}
 		public function getClient_icon_name():String
 		{
 			return this.client_icon_name;
+		}
+		
+		// GET/SET client_icon_action
+		public function setClient_icon_action(client_icon_action:String)
+		{
+			this.client_icon_action=client_icon_action;
+		}
+		public function getClient_icon_action():String
+		{
+			return this.client_icon_action;
 		}
 		
 		// GET/SET client_icon_position
