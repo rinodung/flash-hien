@@ -89,14 +89,16 @@
 		public var tmpIconAction:String;
 		
 		//Constant
-		public static const AVATAR_NORMAL:int = 1; 
-		public static const AVATAR_VOTE:int = 2;
-		public static const AVATAR_TALK:int = 3;
-		public static const AVATAR_WINK:int = 4;
-		public static const AVATAR_SHOOK_LEFT:int = 5;
-		public static const AVATAR_SHOOK_RIGHT:int = 6;
-		public static const AVATAR_WRITTING:int = 7;
-		public static const AVATAR_SLEEP:int = 8;
+		public static const AVATAR_NORMAL:int = 1; //bình thường
+		public static const AVATAR_VOTE:int = 2; //phát biểu
+		public static const AVATAR_TALK:int = 3; //nói
+		public static const AVATAR_SMILE:int = 4; //cười
+		public static const AVATAR_SAD:int = 5; //buồn
+		public static const AVATAR_SHOOK_LEFT:int = 6; //lắc đầu qua trái
+		public static const AVATAR_SHOOK_RIGHT:int = 7; //lắc đầu qua phải
+		public static const AVATAR_NOD:int = 8; // gật đầu
+		public static const AVATAR_YAWN:int = 9; // ngáp
+		public static const AVATAR_SLEEP:int = 10; // ngủ
 		
 		public static const AVATAR_TIMEOUT_MAXIMUM:int = 6;
 		public static const AVATAR_TIMEOUT_MINIMUM:int = 2;
@@ -108,6 +110,7 @@
 		public function init():void {
 			
 			this.btn_dangnhap.addEventListener(MouseEvent.CLICK, ham_dangnhap);
+			
 			
 			//REMOTECLASS
 			
@@ -194,6 +197,10 @@
 				this.so_ol.addEventListener(SyncEvent.SYNC,on_so_ol_sync);
 				this.so_ol.connect(nc);
 				
+				var room:String="room"+this.room_id;
+				var responder:Responder = new Responder(on_getOldMessage_Complete,on_getOldMessage_fail);
+				this.nc.call("getOldMessage",responder,room);
+				
 		}
 		
 		//ShareObject Synchronization Event Handler
@@ -231,6 +238,8 @@
 				
 				
 			}
+			
+			this.cua_so_chat.parent.setChildIndex( this.cua_so_chat, this.cua_so_chat.parent.numChildren - 1);
 			
 		}//end update_online_list	
 		
@@ -301,7 +310,7 @@
 				if(user.status == 3) {
 					// Neu la minh
 					if(user.client_cer == this.user_id){
-						
+						//-----add thêm mũi tên được ko
 						this.ns_voteback = new NetStream(this.nc);
 						this.ns_voteback.addEventListener(NetStatusEvent.NET_STATUS, handleStreamStatus);
 						//this.ns_voteback.inBufferSeek = true;
@@ -418,10 +427,10 @@
 			var avatar = null;
 			if(user.client_icon_name=="ava1"){
 					
-					avatar = new ava1n_mc();									
+					avatar = new ava1_mc();									
 			}
 			else if (user.client_icon_name=="ava2"){
-					avatar = new ava2n_mc();
+					avatar = new ava2_mc();
 			}
 			else if (user.client_icon_name=="ava3"){
 					avatar = new ava3_mc();					
@@ -592,7 +601,21 @@
 			//var avatar = new ava1_mc();
 			trace(this.txt_inputten.text + " " + this.txt_inputmk.text);
 			gotoAndStop(2);
+			
+			this.btn_chat.addEventListener(MouseEvent.CLICK, ham_hien_cs_chat);
+			this.btn_chat.addEventListener(MouseEvent.ROLL_OVER,btn_over);
+			this.btn_chat.addEventListener(MouseEvent.ROLL_OUT,btn_out);
+			
+			this.close_chat.addEventListener(MouseEvent.CLICK, ham_close_chat);
 			this.btn_vote.addEventListener(MouseEvent.CLICK,btn_vote_click);
+			
+			//this.input_chat.addEventListener(KeyboardEvent.KEY_DOWN,input_chat_enter);
+			this.cua_so_chat.btn_send.addEventListener(MouseEvent.CLICK,chat_button_send_click);
+			this.cua_so_chat.btn_send.addEventListener(KeyboardEvent.KEY_DOWN,input_chat_enter);
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, input_chat_enter);
+			
+			this.cua_so_chat.btn_send.addEventListener(MouseEvent.ROLL_OVER,btn_over);
+			this.cua_so_chat.btn_send.addEventListener(MouseEvent.ROLL_OUT,btn_out);
 			//this.btn_talk.addEventListener(MouseEvent.CLICK,btn_talk_click);
 			//this.btn_shook.addEventListener(MouseEvent.CLICK,btn_shook_click);
 			//this.btn_shook.addEventListener(MouseEvent.CLICK,btn_wink_click);
@@ -602,6 +625,8 @@
 			this.cb_6.addEventListener(MouseEvent.CLICK, check_avatar_action);
 			this.cb_7.addEventListener(MouseEvent.CLICK, check_avatar_action);
 			this.cb_8.addEventListener(MouseEvent.CLICK, check_avatar_action);
+			this.cb_9.addEventListener(MouseEvent.CLICK, check_avatar_action);
+			this.cb_10.addEventListener(MouseEvent.CLICK, check_avatar_action);
 			connect();
 					
 		}// end ham_dang nhap
@@ -623,7 +648,13 @@
 			} 
 			if(this.cb_8.selected) {
 				this.icon_action+="8,";
-			} 
+			}
+			if(this.cb_9.selected) {
+				this.icon_action+="9,";
+			}
+			if(this.cb_10.selected) {
+				this.icon_action+="10,";
+			}
 			
 			if(this.icon_action == "") {
 				this.icon_action = "4";
@@ -641,7 +672,23 @@
 			this.gotoAndStop(1);
 		}
 		//end ham_dang xuat
-	
+		
+		//Ham hien cua so chat
+		public function ham_hien_cs_chat (event: MouseEvent):void{
+			cua_so_chat.visible=true;
+			close_chat.visible=true;
+			cua_so_chat.parent.setChildIndex( cua_so_chat, cua_so_chat.parent.numChildren - 1);
+			stage.focus = this.cua_so_chat.input_chat;
+			
+		}
+		
+		//Ham close_chat
+		public function ham_close_chat (event: MouseEvent):void{
+			cua_so_chat.visible=false;
+			close_chat.visible=false;
+			//cua_so_chat.parent.setChildIndex( cua_so_chat, cua_so_chat.parent.numChildren - 1);
+		}
+		
 	
 		// ham btn_vote_click
 		public function btn_vote_click (event: MouseEvent):void{
@@ -657,49 +704,7 @@
 			}			
 		}
 		
-		// ham btn_talk_click
-		public function btn_talk_click (event: MouseEvent):void{
-			var avatar:MovieClip = this.getAvatarByUserId(this.user_id);
-			if(avatar == null) {
-				return;
-			}
-			if(avatar.currentFrame != 3) {
-				avatar.gotoAndStop(3);
-			} else {
-				avatar.gotoAndStop(1);
-			}
-			
-		}
 		
-		// ham btn_shook_click
-		public function btn_shook_click (event: MouseEvent):void{
-			var avatar:MovieClip = this.getAvatarByUserId(this.user_id);
-			if(avatar == null) {
-				return;
-			}
-			// 
-			if(avatar.currentFrame != 4) {				
-				this.notifyStatus("shook");
-			} else {								
-				this.notifyStatus("canvote");
-			}			
-			
-		}
-		
-		// ham btn_wink_click
-		public function btn_wink_click (event: MouseEvent):void{
-			var avatar:MovieClip = this.getAvatarByUserId(this.user_id);
-			if(avatar == null) {
-				return;
-			}
-			// 
-			if(avatar.currentFrame != 5) {				
-				this.notifyStatus("wink");
-			} else {								
-				this.notifyStatus("canvote"); // cancel vote tương đương frame số 1
-			}			
-			
-		}
 		// thay đổi trạng thái avatar (giơ tay)		
 		public function updataAvatar(avatar:MovieClip): void{
 			
@@ -728,6 +733,77 @@
 			this.ns_playback.play(this.room_id, -1);
 		
 			this.addChild(video_playback);
+		}
+		
+		private function input_chat_enter(event:KeyboardEvent):void
+		{
+			if(event.charCode == 13){
+				
+				// your code here
+				var scope:String="room"+this.room_id;
+				var message:String=this.user_name+": "+this.cua_so_chat.input_chat.text;
+				if(message!=""&&this.nc.connected==true)
+				{
+					var responder:Responder = new Responder(on_send_message_complete, on_send_message_fail);
+					this.nc.call("sendMessage",null,scope,message);	
+				}
+				this.cua_so_chat.input_chat.text="";
+			}
+		}
+		
+		public function receiveMessage(mesg:String):void
+		{
+			this.cua_so_chat.noidung_chat.appendText(mesg+"\n");
+			this.cua_so_chat.noidung_chat.verticalScrollPosition=this.cua_so_chat.noidung_chat.maxVerticalScrollPosition;
+			
+		}
+		
+		private function chat_button_send_click(event: MouseEvent):void
+		{
+			if(this.cua_so_chat.input_chat.text == "") return;
+			// your code here
+			var scope:String="room"+this.room_id;
+			var message:String=this.user_name+": " + this.cua_so_chat.input_chat.text;
+			if(message!=""&&this.nc.connected==true)
+			{
+				var responder:Responder = new Responder(on_send_message_complete, on_send_message_fail);
+				this.nc.call("sendMessage",null,scope,message);	
+			}
+			this.cua_so_chat.input_chat.text="";
+			
+		}
+		
+		private function on_send_message_complete(result:Object):void
+		{
+			
+			trace("on_send_message_complete");
+		}
+		
+		private function on_send_message_fail(result:Object):void
+		{
+			trace("on_send_message_fail");
+		}
+		
+		//get old message chat in room
+		private function on_getOldMessage_Complete(result:Object):void
+		{
+			if(result.toString()!="") this.cua_so_chat.noidung_chat.text=result.toString();
+			this.cua_so_chat.noidung_chat.verticalScrollPosition = this.cua_so_chat.noidung_chat.maxVerticalScrollPosition;
+			
+		}
+		private function on_getOldMessage_fail(result:Object):void
+		{
+			this.cua_so_chat.noidung_chat.appendText(result.toString());
+			
+		}
+		
+		private function btn_over(me:MouseEvent)
+		{
+			Mouse.cursor="button";
+		}
+		private function btn_out(me:MouseEvent)
+		{
+			Mouse.cursor="auto";
 		}
 		
 		private function handleStreamStatus(e:NetStatusEvent):void {

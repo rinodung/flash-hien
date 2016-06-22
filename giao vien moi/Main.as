@@ -84,14 +84,16 @@
 		public var avatarArray: Array;		
 		
 		//Constant
-		public static const AVATAR_NORMAL:int = 1; 
-		public static const AVATAR_VOTE:int = 2;
-		public static const AVATAR_TALK:int = 3;
-		public static const AVATAR_WINK:int = 4;
-		public static const AVATAR_SHOOK_LEFT:int = 5;
-		public static const AVATAR_SHOOK_RIGHT:int = 6;
-		public static const AVATAR_WRITTING:int = 7;
-		public static const AVATAR_SLEEP:int = 8;
+		public static const AVATAR_NORMAL:int = 1; //bình thường
+		public static const AVATAR_VOTE:int = 2; //phát biểu
+		public static const AVATAR_TALK:int = 3; //nói
+		public static const AVATAR_SMILE:int = 4; //cười
+		public static const AVATAR_SAD:int = 5; //buồn
+		public static const AVATAR_SHOOK_LEFT:int = 6; //lắc đầu qua trái
+		public static const AVATAR_SHOOK_RIGHT:int = 7; //lắc đầu qua phải
+		public static const AVATAR_NOD:int = 8; // gật đầu
+		public static const AVATAR_YAWN:int = 9; // ngáp
+		public static const AVATAR_SLEEP:int = 10; // ngủ
 		public static const AVATAR_TIMEOUT_MAXIMUM:int = 6;
 		public static const AVATAR_TIMEOUT_MINIMUM:int = 2;
 		public function Main() {
@@ -141,16 +143,16 @@
 		
 		public function loaderComplete():void	{		
 				// init chair array
-				this.chairArray = [new Chair(755,505),
-								   new Chair(610,505), 
-								   new Chair(470,505), 
-								   new Chair(330,505),
-								   new Chair(190,505), 
-								   new Chair(50,505), 
-								   new Chair(913,390), 
-								   new Chair(770,380), 
-								   new Chair(630,380), 
-								   new Chair(480,390)]; 
+				this.chairArray = [new Chair(770,510),
+								   new Chair(630,510), 
+								   new Chair(480,510), 
+								   new Chair(350,505),
+								   new Chair(205,505), 
+								   new Chair(60,505), 
+								   new Chair(940,390), 
+								   new Chair(800,385), 
+								   new Chair(660,385), 
+								   new Chair(510,390)]; 
 								
 				
 				this.icon_position = "-1";
@@ -419,12 +421,12 @@
 		// Set Chair
 		public function setChairPosition(user:Client): MovieClip{
 			var avatar = null;
-			if(user.client_icon_name=="ava1"){
+			/*if(user.client_icon_name=="ava1"){
 					
-					avatar = new ava1n_mc();									
+					avatar = new ava1_mc();									
 			}
 			else if (user.client_icon_name=="ava2"){
-					avatar = new ava2n_mc();
+					avatar = new ava2_mc();
 			}
 			else if (user.client_icon_name=="ava3"){
 					avatar = new ava3_mc();					
@@ -449,6 +451,19 @@
 			}
 			else { 
 					avatar = new ava10_mc();					
+			}*/
+			if(user.client_icon_name=="ava1"){
+					
+					avatar = new ava1_mc();									
+			}
+			else if (user.client_icon_name=="ava2"){
+					avatar = new ava2_mc();
+			}
+			else if (user.client_icon_name=="ava3"){
+					avatar = new ava3_mc();					
+			}
+			else{
+					avatar = new ava4_mc();					
 			}
 			
 			var position = user.client_icon_position;

@@ -1,0 +1,72 @@
+﻿cai icon bi hieu ung la, chi xem nhe
+
+trong truong hop nay 9s thi change icon mot lan, chi thay doi 10,5 lai thich hop he
+
+Khi thay doi trạng thái icon, timer sẽ đếm lại với random timeout khác
+
+em debud xong cai do, de chi chinh lai may cai checkbox chut
+
+ok nhiệm vụ của chị là chỉnh lại con số 10,5 kia sao cho hợp lý, đó là khoảng cách random mà 
+avatar sẽ thay đổi trạng thái.
+
+Sẽ ngồi im một tí, khi có người mới vào, hay thoát ra
+
+Mỗi avatar sẽ có một bộ timer đếm khác nhau với timeout khác nhau
+
+hieu ung vay dung chua chi?
+
+CHỊ CÓ ĐỔI
+$> CHỚP MẮT< LẮC TRÁI< LẮC PHẢI< GHI BÀI<NGÁP MÀ CHƯA SỬA TRÊN ĐÓ
+
+vậy chị sửa đi nha, vậy ổn rồi đó, chị làm hiệu ứng đi nha, nếu có thêm gì thì thêm vào đây
+
+Roi do, chi cu lam them checkbox gì thì phải thêm code.
+
+Nhớ ghi chú lại: cb_4 là gì: lắc đầu hay trái phải gì... vì trên server là lưu 4, 5,6,7....
+
+chị hiểu ý em nói khong?
+chị hiểu rồi, mà cái file gvieen mới, giờ chị đăng nhập bên sv thì bên gv nó ko hiện nữa
+dau chi lam thu coi?
+
+chị có sửa gì ko?
+ko em ơi, bữa đó về chị mở lên là nó ko vô
+chỉ chị đổi con avatar thôi
+
+
+chi keo cai checkbox qua mot ben bang, de no bi che mat roi
+ok
+cai cho (10,5)
+doi chi chut chi xem
+randomRange (10,5): Hàm này tạo ra một con số random từ 5-10 ví dụ: 5600 mili giay,
+8733 mili giay. Trong Flash Timer sẽ dựa vào con số này mà đổi trạng thái icon một lần(lắc, gât...)
+
+Ví dụ random lần 1: 5600 -> thì avatar sau 5,6 giây sẽ thay đổi một lần
+Random lần 2: 8733 -> thì avatar sau 8.733 giây thay đổi một lần
+
+còn thay đổi cái trạng thái gì tiếp theo thì lại vô random ra icon như bữa trước mình làm.
+
+Chi ước tính max - min thời gian mà avatar có thể thay đổi rồi điều chỉnh vô đây.
+
+chi coi di nha, nhớ chỉnh là phải chỉnh hai bên giáo viên và sinh viên cái con số 10,5 đó
+ 
+vậy 10 là giá trị max, 5 là min đúng =>đúng
+
+chị ví dụ
+là trạng thái 4 -> 5 phút 1 lần
+trạng thái 5 -> 10 phút một lần
+...
+các trạng lại có khoảng thời gian khác nhau
+vậy lấy cái cao nhất và thấp nhất thôi hả e
+=> Đúng chị, vì mình random nên có trường hợp 4 - 4 - 5 - 4
+uhm
+vậy xíu chiều 2 chị e có gặp ko
+
+1. chiều em xong em chạy xuông cỡ 5h quá chị, chị điều chỉnh và test thử coi có vấn đề gì ko?
+2. Chị dời checkbox qua chổ có thể click được, video giáo viên che mất rồi
+
+ vậy nha chị.
+ok, thks e.
+
+
+
+
