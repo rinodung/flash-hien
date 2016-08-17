@@ -591,7 +591,14 @@
 			
 			//....	
 			this.room_id = "default";
-			this.input_host = "rtmp://127.0.0.1:1935/firstapp/room"+ this.room_id;			
+			//Local
+			//this.input_host = "rtmp://127.0.0.1:1935/firstapp/room"+ this.room_id;			
+			
+			//citd remote, thay ip va port! 
+			//this.input_host = "rtmp://118.55.69.51:4935/firstapp/room"+ this.room_id;		
+			
+			//citd local, thay ip va port! 
+			this.input_host = "rtmp://192.168.1.128:1935/firstapp/room"+ this.room_id;		
 			
 			this.user_id = randomRange(5000,2).toString(4);
 			this.user_name = "Sinh vien " + this.user_id;
@@ -755,6 +762,7 @@
 		{
 			this.cua_so_chat.noidung_chat.appendText(mesg+"\n");
 			this.cua_so_chat.noidung_chat.verticalScrollPosition=this.cua_so_chat.noidung_chat.maxVerticalScrollPosition;
+			this.btn_chat.emphasized =true;
 			
 		}
 		
