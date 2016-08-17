@@ -669,7 +669,7 @@
 			this.input_host = "rtmp://192.168.1.128:1935/firstapp/room"+ this.room_id;	
 			
 			//server - mạng ngoài citd 118.55.69.51:4935
-			this.input_host = "rtmp://118.55.69.51:4935/firstapp/room"+ this.room_id;	
+			//this.input_host = "rtmp://118.55.69.51:4935/firstapp/room"+ this.room_id;	
 			
 			this.user_id = randomRange(5000,2).toString(4);
 			this.user_name = "Giao Vien " + this.user_id;

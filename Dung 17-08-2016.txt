@@ -1,0 +1,91 @@
+﻿- OK, chị mở server có tên chị hiền lên giúp em, con dưới cùng thì phải
+gắm dây nguồn vô thôi pk e
+- Chị thấy tên chị Hiền dán lên may chưa? coi chừng tắt lộn
+ko có tên, nhưng chỉ có 1 cái m áy cuối cùng chưa mở
+- nó ghi cái gì trên đó chi? ko ghi gì cả
+- 2 cái máy kia ghi gì chị? online B-C, online A-B-C
+- 2 cái máy trên cùng đúng ko?uhm
+- sao chị? ko, chị đã gắm điện cái máy cuối rồi
+- từ từ chị làm theo em nhé, tắt nhầm máy lại mệt nữa ok?ok
+- chị coi xung quanh co có một cái máy cpu den den, có ghi chữ trên đó ngay dưới bàn mình hay ngồi đó!
+có 1 cái ghi online A, còn 2 cái kia ko ghi gì cả
+- ok vậy là đúng rồi. Bây giờ chị cấm điện cái cuối lên, bên tay trái có cái nút nguồn nhỏ nhỏ, bấm vào cho nó khỏi động nhé
+nút power đúng ko< C? hị thấy nó đang xanh, có cần bấm nữa ko, vậy duoc roi de em test thử
+- chị bấm nút power lại, nhớ là cái cuối cùng nhé, đừng tắt nhầm, chắc phải bấm 2 lần =?>khi chị nghe tiếng rú máy khởi động là ok
+rồi e => có nghe tiếng rú rất to đúng ko?uhm
+- Rồi để nó khởi động, chị ra đằng sau coi có cấm dây mạng cho nó chưa? có dây mạng rồi? mấy cuối?uh
+- 2 máy trên vẫn có dây mạng đúng chứ chị? uh
+máy cuối có dây mạng but ko chớp đèn? để em kiểm tra lại, căng quá ta? chạy rút dây mạng mấy cuối cấm vào lổ bên kia của 
+máy còn lại xem sao? ko có mạng thì thua
+chị đã cắm qua cổng kế bên của nó luôn, có đèn, e test lại thử => chưa được
+- chị rút dây bàn phím và màn hình của máy trên xuống mấy cuối, nhớ đừng rút dây mạng => coi nó hiện màn hình login chua?
+rồi, hiện login rồi => chờ em tí OK
+- OK chi cho em ti nhe uh? 
+- code nay  van dang chay binh thuong dung ko chi? uhm => ko co chinh sua gi them dung ko?
+code tren github hay tren may chij tren
+ may chi uhm, thu muc flash nhap nha, ko? code phia server ne, uhm, ko e
+ok
+
+chi, vay la on dung ko? de em day len server truong
+uhm, e day len di, nhung mai mot minh update them duoc ma pk => UHM chi chu lam binh thuong em se update cho ok e
+
+
+
+ok Server đã ổn chị mở những file flash lên, thay địa chỉ 
+
+CÁI NÀY QUAN TRỌNG =<  CÂN LƯU LẠI
+1. Nếu ở nhà(mạng ngoài citd)
+IP: 127.0.0.1 => 118.55.69.51
+port: 1935 => 4935
+
+2. Nếu xai mạng citd
+IP: 127.0.0.1 => 192.168.1.128 
+port: 1935 => 1935
+là ok
+
+Nếu chị về nhà muốn sửa lại chạy ở local thì làm ngược lại, giờ xem em sửa nhé!!! ok?
+uhm, vậy chị có cần phải chạy cái ellipe nữa ko?
+- Nếu chị muốn test trên local thì vẫn làm bt như trước giờ
+- Chị hiểu chưa? rồi but khi chạy trên server chị có cần vào putty như e ko? ko chị, em sẽ cho nó luôn luôn chạy nên chị cứ cần
+mở flash lên thay IP tùy vào mình o trường hợp nào thôi
+- Nếu chị muốn test trên citd thì thay IP port thôi, nếu có sửa code phía server gì(eclipse) thì nói em để em update lên citd
+- 2 bảng này đọc lập với nhau => git để đồng bộ, chị hiẻu
+- rồi h như vậy nhe => chị cứ làm bình thường trên local, nếu cần gì thi pm cho em em update lên server là ok. giờ thay địa chỉ IP đây
+- chac thay chua mo port nay
+
+- Server đã chạy => giờ chị thay đổi IP bên giáo viên em coi
+đúng ko e => chị hiểu vấn đề rồi đó => h chi commit lên github cai flash xem nao? rồi e
+- ok chị
+thầy nói mở phòng học lên cho máy ở đó chạy, tức là mình phải chép flash lên các máy đó pk e?
+
+em chưa hiểu lắm, chị mở giáo viên lên rồi sao đó đưa file flash sinh viên cho thầy, ứng dụng hay muốn web chi?
+thầy ko nói vậy, chắc cái nào cũng được tùy mình
+thầy chỉ nói test thử mấy phòng máy rồi báo cáo kết quả (phần bữa giờ chị e mình làm)
+thầy mới giao chị 1 phần nữa là nhận dạng khuôn mặt, mà thay vì mình cho random hoạt động thì giờ lấy tham số từ
+phần mềm nhận dạng chuyển qua=> cái đó mình tính sau nha chị
+
+=> Bây giờ chị xác định giùm em: là chị chạy bằng ứng dụng(file flash) hay bỏ qua web để dùng url truy cập?
+vậy chị bỏ qua web ok chi xem nhé
+
+
+Chương trình winscp này giúp mình bỏ file html chứa flash lên web =>/var/www/html => mỗi lần thay đổi dưới máy chị thì 
+cần update lại 2 file flash va html:
+
+=> web của chị đây: http://online.citd.vn:4080/hien-caohoc
+=> Sinh vien: http://online.citd.vn:4080/hien-caohoc/sinh-vien/
+=> Giao vien: http://online.citd.vn:4080/hien-caohoc/giao-vien/
+
+
+alo?nghe e
+Giờ nhé chị cứ làm bình thường nếu flash có thay đổi gì thì chị cần:
+1.  save lại => publish ra file flash + html 
+2. bỏ wa web dung Winscp nhe: ko cần xóa, publish nó sẽ tự override lên
+3. commit lên github để lưu lại code nhé chi.
+
+chị hiểu ko? hiểu, còn cái username và pass để vào citd-4022 trong winscp đó e: citd / citdpassword!12@
+
+ok roi do chi, chi ko can đăng nhâp nữa => bây giờ chị bỏ file nói chuyện này vào flash nhap sau do commit lên github roi mình làm
+ tiếp
+e có đi học ko 4h hơn rồi đó => vậy à? chị commit di rồi test lại trên web coi sao nhé? ok em
+thứ 6 e có thời gian ko, hix, chờ nhờ e thêm buổi nữa nè => ok chị có gì em alo cho chị => chị commit đi rồi test lại
+ok, chị đóng file này lại nha.
