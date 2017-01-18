@@ -395,7 +395,7 @@
 				tmpChair.timer.start();
 			}
 			
-			//Neu ma gio tay, hoac la phat bieu
+			//neu ma empty
 			if(user.status == Main.AVATAR_EMPTY ) {
 				tmpChair.timer.stop();
 			}else{
@@ -868,7 +868,7 @@
 			v.attachCamera(c);
 			v.x = v.y = 10;
 	
-			addChild(v);
+			//addChild(v);
 			
 			// provide a video instance to CMotionTracker			
 			mt = new CMotionTacker(v);
@@ -878,9 +878,9 @@
 			view.x = 10 + camX + 10;
 			view.y = 10;
 			
-			addChild(view);
+			//addChild(view);
 			
-			addChild(bound);
+			//addChild(bound);
 			v.addEventListener(Event.EXIT_FRAME, trackerMotionLoop);
 			
 		}
