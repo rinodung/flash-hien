@@ -44,6 +44,8 @@
 	
 	import flashx.textLayout.factory.StringTextLineFactory;
 	
+	
+	
 	import red5.*;
 	//import mx.core.FlexBitmap;
 	public class Main extends MovieClip {
@@ -94,8 +96,10 @@
 		public static const AVATAR_NOD:int = 8; // gật đầu
 		public static const AVATAR_YAWN:int = 9; // ngáp
 		public static const AVATAR_SLEEP:int = 10; // ngủ
+		public static const AVATAR_EMPTY:int = 11; // empty
 		public static const AVATAR_TIMEOUT_MAXIMUM:int = 6;
 		public static const AVATAR_TIMEOUT_MINIMUM:int = 2;
+		public static const DIFF_FRAME:int = 50;
 		public function Main() {
 			
 			this.init();			
@@ -128,6 +132,7 @@
 						trace("Success");
 						this.publishVideo();
 						this.video_publish.attachCamera(this.cam);
+						
 						break;
 					case "NetConnection.Connect.Closed":
 						
@@ -366,6 +371,13 @@
 			} else if(user.status == Main.AVATAR_TALK) {
 				this.stopAllChairTimer(user.client_cer);
 			} else {
+				tmpChair.timer.start();
+			}
+			
+			//neu ma empty
+			if(user.status == Main.AVATAR_EMPTY ) {
+				tmpChair.timer.stop();
+			}else{
 				tmpChair.timer.start();
 			}
 				
@@ -663,10 +675,10 @@
 			//....	
 			this.room_id = "default";
 			// local host
-			//this.input_host = "rtmp://127.0.0.1:1935/firstapp/room"+ this.room_id;		
+			this.input_host = "rtmp://127.0.0.1:1935/firstapp/room"+ this.room_id;		
 			
 			//server - mạng citd  192.168.1.128:1935
-			this.input_host = "rtmp://192.168.1.128:1935/firstapp/room"+ this.room_id;	
+			//this.input_host = "rtmp://192.168.1.128:1935/firstapp/room"+ this.room_id;	
 			
 			//server - mạng ngoài citd 118.55.69.51:4935
 			//this.input_host = "rtmp://118.55.69.51:4935/firstapp/room"+ this.room_id;	
@@ -830,6 +842,9 @@
 					break;
 			}
 		}
+		
+		
+		
 	}// end movie clip
 	
 	

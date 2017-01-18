@@ -44,6 +44,15 @@
 	import flash.geom.Point;
 	//import flash.sampler.NewObjectSample; // dùng cho addchild
 	
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
+	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
+	
+	import com.chang.motiontracker.CMotionTacker;
+	
 	import flashx.textLayout.factory.StringTextLineFactory;
 	
 	import red5.*;
@@ -88,6 +97,16 @@
 		public var tmpAvatar:MovieClip;
 		public var tmpIconAction:String;
 		
+		//Tracker Motion
+		private var mt:CMotionTacker;
+		
+		private var v:Video;
+		private var view:Bitmap;
+		private var camX:int = 320;
+		private var camY:int = 240;
+		
+		private var bound:Sprite = new Sprite();
+		
 		//Constant
 		public static const AVATAR_NORMAL:int = 1; //bình thường
 		public static const AVATAR_VOTE:int = 2; //phát biểu
@@ -99,9 +118,12 @@
 		public static const AVATAR_NOD:int = 8; // gật đầu
 		public static const AVATAR_YAWN:int = 9; // ngáp
 		public static const AVATAR_SLEEP:int = 10; // ngủ
+		public static const AVATAR_EMPTY:int = 11; // empty
 		
 		public static const AVATAR_TIMEOUT_MAXIMUM:int = 6;
 		public static const AVATAR_TIMEOUT_MINIMUM:int = 2;
+		
+		public static const DIFF_FRAME:int = 50;
 		public function Main() {
 			
 			this.init();			
@@ -134,6 +156,7 @@
 					case "NetConnection.Connect.Success":
 						trace("Success");
 						playbackVideo();
+						trackerMotion();
 						break;
 					case "NetConnection.Connect.Closed":
 						
@@ -161,7 +184,8 @@
 								   new Chair(525,550)];
 				
 				this.icon_position = "-1";
-				this.icon_action = "4";
+				this.icon_action = Main.AVATAR_SMILE.toString();//default 4
+				
 				/*
 				var numCam:int = Camera.names.indexOf("XSplitBroadcaster",0);
 				if (numCam != -1)
@@ -371,6 +395,12 @@
 				tmpChair.timer.start();
 			}
 			
+			//Neu ma gio tay, hoac la phat bieu
+			if(user.status == Main.AVATAR_EMPTY ) {
+				tmpChair.timer.stop();
+			}else{
+				tmpChair.timer.start();
+			}
 		}
 		
 		// Reset All Chair to empty room
@@ -403,10 +433,10 @@
 				var avatar_random_frame: Number = avatar_action_array[avatar_random_index];
 				if(tmpChair.avatar == null) {
 					tmpChair.timer.stop();
-					trace("avatar Action " + user.client_icon_name +" stop");
+					//trace("avatar Action " + user.client_icon_name +" stop");
 				} else {
 					tmpChair.avatar.gotoAndStop(avatar_random_frame);
-					trace("avatar Action " + user.client_icon_name + " TimerHandler: " + iconAction + "=>setAvatarAction: " + avatar_random_frame);
+					//trace("avatar Action " + user.client_icon_name + " TimerHandler: " + iconAction + "=>setAvatarAction: " + avatar_random_frame);
 				}
 				
 			};
@@ -454,7 +484,7 @@
 					tmpChair.avatar = avatar;
 					this.addChild(avatar);
 					
-					trace("Set new chair successfully: " + user.client_cer);
+					//trace("Set new chair successfully: " + user.client_cer);
 					
 					if(user.client_cer == this.user_id) {
 						this.notifyPosition(newChairIndex);
@@ -475,7 +505,7 @@
 				tmpChair.id = user.client_cer;
 				tmpChair.avatar = avatar;
 				this.addChild(avatar);
-				trace("Set old chair successfully: " + user.client_cer);
+				//trace("Set old chair successfully: " + user.client_cer);
 				if(user.client_cer == this.user_id) {
 						
 						this.updataAvatar(avatar);
@@ -561,12 +591,12 @@
 		private function on_set_position_complete(result:Object):void
 		{
 			
-			trace("on_set_position_complete");
+			//trace("on_set_position_complete");
 		}
 		
 		private function on_set_position_fail(result:Object):void
 		{
-			trace("on_set_position_fail");
+			//trace("on_set_position_fail");
 		}
 		
 		public function receiveCommand(mesg:String):void
@@ -574,14 +604,14 @@
 			// This blank will fill by some code to occour some thing.
 			
 			var comArray:Array = mesg.split("-");
-			trace("Commmad: " + comArray[0]);
-			trace("Client cer:" + comArray[1]);
+			//trace("Commmad: " + comArray[0]);
+			//trace("Client cer:" + comArray[1]);
 			var clientCer:String = comArray[1];
 			var command:String = comArray[0];
 			
 			if(command == "setPosition") {
 				
-				trace("Send Message: " + command);
+				//trace("Send Message: " + command);
 			}		
 			
 		}
@@ -592,13 +622,13 @@
 			//....	
 			this.room_id = "default";
 			//Local
-			//this.input_host = "rtmp://127.0.0.1:1935/firstapp/room"+ this.room_id;			
+			this.input_host = "rtmp://127.0.0.1:1935/firstapp/room"+ this.room_id;			
 			
 			//citd remote, thay ip va port! 
 			//this.input_host = "rtmp://118.55.69.51:4935/firstapp/room"+ this.room_id;		
 			
 			//citd local, thay ip va port! 
-			this.input_host = "rtmp://192.168.1.128:1935/firstapp/room"+ this.room_id;		
+			//this.input_host = "rtmp://192.168.1.128:1935/firstapp/room"+ this.room_id;		
 			
 			this.user_id = randomRange(5000,2).toString(4);
 			this.user_name = "Sinh vien " + this.user_id;
@@ -826,6 +856,86 @@
 					trace("Video Netstream Buffer Flushed!!!!");
 					break;
 			}
+		}
+		
+		// Xu ly camera phát hiện rời khỏi màn hình
+		public function trackerMotion():void 
+		{			
+			var c:Camera = Camera.getCamera();
+			c.setMode(camX, camY, 30);
+			
+			v = new Video();
+			v.attachCamera(c);
+			v.x = v.y = 10;
+	
+			addChild(v);
+			
+			// provide a video instance to CMotionTracker			
+			mt = new CMotionTacker(v);
+			
+			// Draw a bitmap to see what actually is happening
+			view = new Bitmap(new BitmapData(camX,camY));
+			view.x = 10 + camX + 10;
+			view.y = 10;
+			
+			addChild(view);
+			
+			addChild(bound);
+			v.addEventListener(Event.EXIT_FRAME, trackerMotionLoop);
+			
+		}
+		private function trackerMotionLoop(e:Event):void {
+			var p:Point = new Point();
+			
+			// if there is motion
+			if (mt.track()){
+				
+				p.x = mt.x + view.x;
+				p.y = mt.y + view.y;			
+				
+				bound.graphics.clear();				
+				bound.graphics.lineStyle(2, 0x0000ff);
+				
+				// CMotionTracker's bound property returns a rectangle containing the tracked area
+				bound.graphics.drawRect(mt.bound.x + view.x, mt.bound.y, mt.bound.width, mt.bound.height);
+				
+				bound.graphics.lineStyle(2, 0x0000ff);				
+				bound.graphics.drawCircle(p.x, p.y, 3);
+				bound.graphics.lineStyle(2, 0xff0000);
+				bound.graphics.drawCircle(p.x - view.x, p.y, 3);
+				
+				// Xu ly chinh o day
+				var avatar:MovieClip = this.getAvatarByUserId(this.user_id);
+					if(avatar == null) {
+						return;
+					}
+				if(mt.x >= Main.DIFF_FRAME && mt.x <= view.width - Main.DIFF_FRAME &&
+				   mt.y >= Main.DIFF_FRAME && mt.y <= view.height - Main.DIFF_FRAME) {
+					
+					if(avatar.currentFrame == Main.AVATAR_EMPTY) {				
+						this.notifyStatus("normal");
+						
+						//avatar.gotoAndStop(Main.AVATAR_NORMAL);
+						//trace("Sinh viên có mặt: " + mt.x + ":" + mt.y + " View: " + view.width +":" + view.height );
+						
+						// o ngoai di vo
+						
+					} 	
+				} else {
+					
+					// o trong di ra
+					if(avatar.currentFrame != Main.AVATAR_EMPTY) {				
+						this.notifyStatus("empty");
+						//avatar.gotoAndStop(Main.AVATAR_EMPTY);
+						//trace("Sinh viên vắng mặt: " + mt.x + ":" + mt.y +  " View: " + view.width +":" + view.height );
+					} 	
+				}
+				
+			}
+			
+			// CMotionTracker's trackImage is the processed bitmapdata
+			// show it in the view bitmap
+			view.bitmapData = mt.trackImage;			
 		}
 	}// end movie clip
 	
