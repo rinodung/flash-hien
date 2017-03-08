@@ -1,0 +1,15 @@
+tbl_faces
+cuoi:2,3,4,5,6
+lac dau: 3,4,1,2
+tbl_user
+1=> 2,3,4,5,6
+
+Flash => getDataFromSQL(1) => cuoi, lacdau
+
+1. Detect Face phai chay song song voi Flash
+2. Detect Face phai luu du lieu xuong sql server
+3. Flash doc du lieu tu sql server len, so sanh
+
+
+HUONG MOI
+DETECT COLOR AND BACKGROUD => EMPTY?

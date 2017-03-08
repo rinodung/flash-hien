@@ -118,10 +118,7 @@
 		public static const AVATAR_NOD:int = 8; // gật đầu
 		public static const AVATAR_YAWN:int = 9; // ngáp
 		public static const AVATAR_SLEEP:int = 10; // ngủ
-		
 		public static const AVATAR_EMPTY:int = 11; // empty
-		public static const AVATAR_TRAI:int = 12; // trai
-		public static const AVATAR_PHAI:int = 13; // phai
 		
 		public static const AVATAR_TIMEOUT_MAXIMUM:int = 6;
 		public static const AVATAR_TIMEOUT_MINIMUM:int = 2;
@@ -468,35 +465,8 @@
 			else if (user.client_icon_name=="ava3"){
 					avatar = new ava3_mc();					
 			}
-			else if (user.client_icon_name=="ava4"){
-					avatar = new ava4_mc();
-			}
-			else if (user.client_icon_name=="ava5"){
-					avatar = new ava5_mc();					
-			}
-			else if (user.client_icon_name=="ava6"){
-					avatar = new ava6_mc();
-			}
-			else if (user.client_icon_name=="ava7"){
-					avatar = new ava7_mc();					
-			}
-			else if (user.client_icon_name=="ava8"){
-					avatar = new ava8_mc();					
-			}
-			else if (user.client_icon_name=="ava9"){
-					avatar = new ava9_mc();					
-			}
-			else if (user.client_icon_name=="ava10"){
-					avatar = new ava10_mc();					
-			}
-			else if (user.client_icon_name=="ava11"){
-					avatar = new ava11_mc();					
-			}
-			else if (user.client_icon_name=="ava12"){
-					avatar = new ava12_mc();					
-			}
 			else{
-					avatar = new ava7_mc();					//chọn đại
+					avatar = new ava4_mc();					
 			}
 			
 			var position = user.client_icon_position;
@@ -652,13 +622,13 @@
 			//....	
 			this.room_id = "default";
 			//Local
-			//this.input_host = "rtmp://127.0.0.1:1935/firstapp/room"+ this.room_id;			
+			this.input_host = "rtmp://127.0.0.1:1935/firstapp/room"+ this.room_id;			
 			
 			//citd remote, thay ip va port! 
 			//this.input_host = "rtmp://118.55.69.51:4935/firstapp/room"+ this.room_id;		
 			
 			//citd local, thay ip va port! 
-			this.input_host = "rtmp://192.168.168.1:1935/firstapp/room"+ this.room_id;		
+			//this.input_host = "rtmp://192.168.1.128:1935/firstapp/room"+ this.room_id;		
 			
 			this.user_id = randomRange(5000,2).toString(4);
 			this.user_name = "Sinh vien " + this.user_id;
@@ -908,6 +878,7 @@
 			view.x = 10 + camX + 10;
 			view.y = 10;
 			
+			
 			addChild(view);
 			
 			addChild(bound);
@@ -939,22 +910,19 @@
 					if(avatar == null) {
 						return;
 					}
-				if(mt.x >= Main.DIFF_FRAME && mt.x <= view.width - Main.DIFF_FRAME /*&&
-				   mt.y >= Main.DIFF_FRAME && mt.y <= view.height - Main.DIFF_FRAME */) {
+				if(mt.x >= Main.DIFF_FRAME && mt.x <= view.width - Main.DIFF_FRAME &&
+				   mt.y >= Main.DIFF_FRAME && mt.y <= view.height - Main.DIFF_FRAME) {
 					
-					if(avatar.currentFrame == Main.AVATAR_EMPTY) {				
+					if(avatar.currentFrame == Main.AVATAR_EMPTY) 
+					{				
 						this.notifyStatus("normal");
-						/*if(mt.x<=140){
-							//this.notifyStatus("left");
+						/*if(mt.x<=100){
 							trace("nghiêng trái" + mt.x+":"+ mt.y)
 						}
 						if(mt.x>=160){
-							//this.notifyStatus("right");
 							trace("nghiêng phải" + mt.x+":"+ mt.y)
 						}
-						//if(mt.x>100 && mt.x<160){
-						else{
-							//this.notifyStatus("normal");
+						if(mt.x>100 && mt.x<160){
 							trace("bình thường" + mt.x+":"+ mt.y)
 							
 						}*/
@@ -963,27 +931,12 @@
 						
 						// o ngoai di vo
 						
-					} 
-					
-					trace("Sinh viên có mặt: " + mt.x + ":" + mt.y + " View: " + view.width +":" + view.height );
-					if(mt.x<=100){
-						this.notifyStatus("left");
-						trace("nghiêng trái" + mt.x+":"+ mt.y)
-					} else if(mt.x>=160){
-						this.notifyStatus("right");
-						trace("nghiêng phải" + mt.x+":"+ mt.y)
-					}else{
-						this.notifyStatus("normal");
-						trace("bình thường" + mt.x+":"+ mt.y)
-							
-					}
-					
-				
+					} 	
 				} else {
 					
 					// o trong di ra
 					if(avatar.currentFrame != Main.AVATAR_EMPTY) {				
-						this.notifyStatus("empty");
+						//this.notifyStatus("empty");
 						//avatar.gotoAndStop(Main.AVATAR_EMPTY);
 						trace("Sinh viên vắng mặt: " + mt.x + ":" + mt.y +  " View: " + view.width +":" + view.height );
 					} 	

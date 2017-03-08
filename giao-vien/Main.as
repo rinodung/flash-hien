@@ -475,8 +475,35 @@
 			else if (user.client_icon_name=="ava3"){
 					avatar = new ava3_mc();					
 			}
+			else if (user.client_icon_name=="ava4"){
+					avatar = new ava4_mc();
+			}
+			else if (user.client_icon_name=="ava5"){
+					avatar = new ava5_mc();					
+			}
+			else if (user.client_icon_name=="ava6"){
+					avatar = new ava6_mc();
+			}
+			else if (user.client_icon_name=="ava7"){
+					avatar = new ava7_mc();					
+			}
+			else if (user.client_icon_name=="ava8"){
+					avatar = new ava8_mc();					
+			}
+			else if (user.client_icon_name=="ava9"){
+					avatar = new ava9_mc();					
+			}
+			else if (user.client_icon_name=="ava10"){
+					avatar = new ava10_mc();					
+			}
+			else if (user.client_icon_name=="ava11"){
+					avatar = new ava11_mc();					
+			}
+			else if (user.client_icon_name=="ava12"){
+					avatar = new ava12_mc();					
+			}
 			else{
-					avatar = new ava4_mc();					
+					avatar = new ava7_mc();					//chọn đại
 			}
 			
 			var position = user.client_icon_position;
@@ -675,7 +702,7 @@
 			//....	
 			this.room_id = "default";
 			// local host
-			this.input_host = "rtmp://127.0.0.1:1935/firstapp/room"+ this.room_id;		
+			this.input_host = "rtmp://192.168.168.1:1935/firstapp/room"+ this.room_id;		
 			
 			//server - mạng citd  192.168.1.128:1935
 			//this.input_host = "rtmp://192.168.1.128:1935/firstapp/room"+ this.room_id;	
